@@ -11,6 +11,7 @@ package
 	import starling.core.Starling;
 	
 	import view.MainView;
+	import view.game.Game;
 	
 	public class TDM_V2 extends Sprite
 	{
@@ -37,7 +38,7 @@ package
 			Starling.handleLostContext = true;
 			Starling.multitouchEnabled = true;
 			
-			_starling = new Starling(MainView, stage);
+			_starling = new Starling(Game, stage);
 			_starling.start();
 		}
 		
