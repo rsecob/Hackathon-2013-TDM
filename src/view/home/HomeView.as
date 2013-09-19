@@ -8,7 +8,9 @@ package view.home
 	import feathers.events.FeathersEventType;
 	import feathers.layout.TiledColumnsLayout;
 	import feathers.layout.TiledRowsLayout;
+	import feathers.layout.VerticalLayout;
 	import feathers.system.DeviceCapabilities;
+	import feathers.themes.MetalWorksMobileTheme;
 	
 	import flash.utils.setTimeout;
 	
@@ -67,8 +69,10 @@ package view.home
 			_timeButton = new Button();
 			_timeButton.iconPosition = (Button.ICON_POSITION_TOP);
 			_timeButton.defaultIcon = clockIcon;
+			_timeButton.gap = 10 * MetalWorksMobileTheme.DPI_SCALE;
 			_timeButton.label = "Horaires";
 			_timeButton.addEventListener(Event.RESIZE, button_resize_handler);
+			_timeButton.addEventListener(Event.TRIGGERED, timeButton_clickHandler);
 			
 			var compassIcon:ImageLoader = new ImageLoader();
 			compassIcon.source = EmbeddedAssets.HOME_COMPASS_ICON;
@@ -80,6 +84,7 @@ package view.home
 			_itineraryButton.iconPosition = Button.ICON_POSITION_TOP;
 			_itineraryButton.defaultIcon = compassIcon;
 			_itineraryButton.label = "Itinéraires";
+			_itineraryButton.gap = 10 * MetalWorksMobileTheme.DPI_SCALE;
 			_itineraryButton.addEventListener(Event.RESIZE, button_resize_handler);
 			
 			var markerIcon:ImageLoader = new ImageLoader();
@@ -90,6 +95,7 @@ package view.home
 			_markerButton = new Button();
 			_markerButton.nameList.add(Button.ALTERNATE_NAME_DANGER_BUTTON);
 			_markerButton.iconPosition = Button.ICON_POSITION_TOP;
+			_markerButton.gap = 10 * MetalWorksMobileTheme.DPI_SCALE;
 			_markerButton.defaultIcon = markerIcon;
 			_markerButton.label = "Géolocalisation";
 			_markerButton.addEventListener(Event.RESIZE, button_resize_handler);
@@ -118,6 +124,11 @@ package view.home
 		/////////////////////////////////
 		// Event Handler
 		/////////////////////////////////
+		
+		private function timeButton_clickHandler():void
+		{
+			dispatchEventWith("time", true);
+		}
 		
 		private function listButton_clickHandler():void
 		{

@@ -778,6 +778,7 @@ package feathers.themes
 			defaultIcon.textureScale = this.scale;
 			defaultIcon.snapToPixels = true;
 			button.defaultIcon = defaultIcon;
+			button.minHeight = 80 * this.scale;
 
 			button.gap = Number.POSITIVE_INFINITY;
 			button.iconPosition = Button.ICON_POSITION_RIGHT;
@@ -875,8 +876,9 @@ package feathers.themes
 		protected function pickerListItemRendererInitializer(renderer:BaseDefaultItemRenderer):void
 		{
 			const skinSelector:SmartDisplayObjectStateValueSelector = new SmartDisplayObjectStateValueSelector();
-			skinSelector.defaultValue = this.itemRendererUpSkinTextures;
-			skinSelector.setValueForState(this.itemRendererSelectedSkinTextures, Button.STATE_DOWN, false);
+			skinSelector.defaultValue = this.insetItemRendererMiddleUpSkinTextures;
+			skinSelector.setValueForState(this.insetItemRendererMiddleSelectedSkinTextures, Button.STATE_DOWN, false);
+			skinSelector.defaultSelectedValue = this.insetItemRendererMiddleSelectedSkinTextures;
 			skinSelector.displayObjectProperties =
 			{
 				width: 88 * this.scale,
@@ -885,26 +887,22 @@ package feathers.themes
 			};
 			renderer.stateToSkinFunction = skinSelector.updateValue;
 
-			const defaultSelectedIcon:Image = new Image(this.pickerListItemSelectedIconTexture);
-			defaultSelectedIcon.scaleX = defaultSelectedIcon.scaleY = this.scale;
-			renderer.defaultSelectedIcon = defaultSelectedIcon;
-
-			const defaultIcon:Quad = new Quad(defaultSelectedIcon.width, defaultSelectedIcon.height, 0xff00ff);
-			defaultIcon.alpha = 0;
-			renderer.defaultIcon = defaultIcon;
+//			const defaultSelectedIcon:Image = new Image(this.pickerListItemSelectedIconTexture);
+//			defaultSelectedIcon.scaleX = defaultSelectedIcon.scaleY = this.scale;
+//			renderer.defaultSelectedIcon = defaultSelectedIcon;
 
 			renderer.defaultLabelProperties.textFormat = this.largeLightTextFormat;
 			renderer.defaultLabelProperties.embedFonts = true;
 			renderer.downLabelProperties.textFormat = this.largeDarkTextFormat;
 			renderer.downLabelProperties.embedFonts = true;
 
-			renderer.itemHasIcon = false;
+//			renderer.itemHasIcon = false;
 			renderer.horizontalAlign = Button.HORIZONTAL_ALIGN_LEFT;
 			renderer.paddingTop = renderer.paddingBottom = 8 * this.scale;
 			renderer.paddingLeft = 32 * this.scale;
 			renderer.paddingRight = 24 * this.scale;
-			renderer.gap = Number.POSITIVE_INFINITY;
-			renderer.iconPosition = Button.ICON_POSITION_RIGHT;
+			renderer.gap = 10 * this.scale;//Number.POSITIVE_INFINITY;
+			renderer.iconPosition = Button.ICON_POSITION_LEFT;
 			renderer.accessoryGap = Number.POSITIVE_INFINITY;
 			renderer.accessoryPosition = BaseDefaultItemRenderer.ACCESSORY_POSITION_RIGHT;
 			renderer.minWidth = renderer.minHeight = 88 * this.scale;

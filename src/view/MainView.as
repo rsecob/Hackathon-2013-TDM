@@ -26,6 +26,7 @@ package view
 	
 	import view.home.HomeView;
 	import view.list.List;
+	import view.time.TimeView;
 	
 	public class MainView extends Sprite
 	{
@@ -46,10 +47,8 @@ package view
 		///////////////////////////
 		
 		private static const HOME_VIEW:String = "homeView";
+		private static const TIME_VIEW:String = "timeView";
 		
-		private static const MAIN_MENU_EVENTS:Object =
-			{
-			};
 		
 		private var _list:List;
 		private var listTween:Tween;
@@ -78,17 +77,26 @@ package view
 			this.listTween = new Tween(this._list, 2, Transitions.EASE_IN);
 			
 			this._navigator = new ScreenNavigator();
-			_navigator.x = 0;
+			_navigator.clipContent = true;
 			
 			this._transitionManager = new ScreenSlidingStackTransitionManager(this._navigator);
 			this._transitionManager.duration = 0.4;
+			
+			this._navigator.addScreen(TIME_VIEW, new ScreenNavigatorItem(TimeView,
+				{
+					backHome: HOME_VIEW
+				}));
 			
 			if(DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
 			}
 			else
 			{
-				this._navigator.addScreen(HOME_VIEW, new ScreenNavigatorItem(HomeView, MAIN_MENU_EVENTS));
+				this._navigator.addScreen(HOME_VIEW, new ScreenNavigatorItem(HomeView,
+					{
+						time: TIME_VIEW
+					}));
+				
 				this._navigator.showScreen(HOME_VIEW);
 				
 				addChild(_list);
