@@ -1,5 +1,8 @@
 package view.game
 {
+	import com.gamua.flox.Flox;
+	import com.gamua.flox.Player;
+	
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.text.TextField;
@@ -13,6 +16,7 @@ package view.game
 		protected var _state:int = 0;
 		protected var _scene:Sprite = null;
 		protected var _scenario:GameScenario = null;
+		protected var _score:int = 0;
 		
 		public function set scenario(scenario:GameScenario):void
 		{
@@ -21,6 +25,7 @@ package view.game
 		
 		public function Game()
 		{
+			Flox.init("6bMjTGNEfCLGNA0p", "pfaXoM1llQNtzgjJ", "0.9");
 			this.changeGameState(LOADING_STATE);
 		}
 		
@@ -41,10 +46,15 @@ package view.game
 			}
 			this.addChild(this._scene);
 		}
-		
+
 		public function onLoadingComplete(e:Event):void
 		{
 			this.changeGameState(PLAYING_STATE);
+		}
+		
+		protected function saveScore():void
+		{
+			Flox.postScore("tdm", this._score, (Player.current as FacebookPlayer).username);
 		}
 	}
 }

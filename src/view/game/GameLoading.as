@@ -50,6 +50,16 @@ package view.game
 				return;
 			}
 			
+			scenario.place_from = splited.shift() as String;
+			scenario.place_to = splited.shift() as String;
+			scenario.line = parseInt(splited.shift() as String);
+			
+			var stops:Array = (splited.shift() as String).split(",");
+			
+			for (var stop:String in stops)
+			{
+				scenario.stops.push(stop);
+			}
 			game.scenario = scenario;
 			endScenario = true;
 			this.throwCompleteEvent();
