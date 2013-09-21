@@ -4,6 +4,8 @@ package view
 	import com.greensock.easing.Ease;
 	import com.greensock.easing.Sine;
 	
+	import core.Signal;
+	
 	import feathers.controls.PanelScreen;
 	import feathers.controls.ScreenNavigator;
 	import feathers.controls.ScreenNavigatorItem;
@@ -15,6 +17,10 @@ package view
 	import feathers.system.DeviceCapabilities;
 	import feathers.themes.MetalWorksMobileTheme;
 	
+	import flash.utils.setTimeout;
+	
+	import signal.HomeSignal;
+	
 	import starling.animation.Transitions;
 	import starling.animation.Tween;
 	import starling.core.Starling;
@@ -25,7 +31,9 @@ package view
 	import starling.events.TouchPhase;
 	
 	import view.home.HomeView;
+	import view.itinerary.ItineraryView;
 	import view.list.List;
+	import view.time.TimeView;
 	
 	public class MainView extends Sprite
 	{
@@ -46,10 +54,8 @@ package view
 		///////////////////////////
 		
 		private static const HOME_VIEW:String = "homeView";
-		
-		private static const MAIN_MENU_EVENTS:Object =
-			{
-			};
+		private static const TIME_VIEW:String = "timeView";
+		private static const ITINERARY_VIEW:String = "itineraryView";
 		
 		private var _list:List;
 		private var listTween:Tween;
@@ -59,7 +65,11 @@ package view
 		private var _transitionManager:ScreenSlidingStackTransitionManager;
 		
 		private var lastTouch:Number;
-		private var lastGlobaxX:Number;
+		private var lastGlobalX:Number;
+		
+		// List Signal
+		
+		private var _listOpenSignal:Signal;
 		
 		///////////////////////////
 		// Methods
@@ -77,24 +87,50 @@ package view
 			this._list = new List();
 			this.listTween = new Tween(this._list, 2, Transitions.EASE_IN);
 			
+			_listOpenSignal = HomeSignal.listButtonSignal;
+			_listOpenSignal.add(listButton_handler);
+			
 			this._navigator = new ScreenNavigator();
-			_navigator.x = 0;
+			_navigator.clipContent = true;
 			
 			this._transitionManager = new ScreenSlidingStackTransitionManager(this._navigator);
 			this._transitionManager.duration = 0.4;
+			
+			this._navigator.addScreen(TIME_VIEW, new ScreenNavigatorItem(TimeView,
+				{
+					backHome: HOME_VIEW
+				}));
+			
+			this._navigator.addScreen(ITINERARY_VIEW, new ScreenNavigatorItem(ItineraryView,
+				{
+					backHome: HOME_VIEW
+				}));
 			
 			if(DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
 			}
 			else
 			{
-				this._navigator.addScreen(HOME_VIEW, new ScreenNavigatorItem(HomeView, MAIN_MENU_EVENTS));
+				this._navigator.addScreen(HOME_VIEW, new ScreenNavigatorItem(HomeView,
+					{
+						time: TIME_VIEW,
+						itinerary: ITINERARY_VIEW
+					}));
+				
 				this._navigator.showScreen(HOME_VIEW);
 				
 				addChild(_list);
 				addChild(this._navigator);
 			}
 			
+		}
+		
+		private function listButton_handler(isSelected:Boolean):void
+		{
+			if (isSelected)
+				openList_handler(null);
+			else
+				closeList_handler(null);
 		}
 		
 		private function handleList(touchEvent:TouchEvent):void
@@ -107,15 +143,15 @@ package view
 				lastTouch = begin.globalX;
 			if (moving)
 			{
-				if (isNaN(lastGlobaxX))
+				if (isNaN(lastGlobalX))
 				{
-					if ((moving.globalX > (lastTouch + 20))
-						|| (moving.globalX < (lastTouch - 20)))
-						lastGlobaxX = moving.globalX;
+					if ((moving.globalX > (lastTouch + (80 * MetalWorksMobileTheme.DPI_SCALE)))
+						|| (moving.globalX < (lastTouch - (80 * MetalWorksMobileTheme.DPI_SCALE))))
+						lastGlobalX = moving.globalX;
 				}
 				else
 				{
-					var newPosition:Number = _navigator.x + (moving.globalX - lastGlobaxX);
+					var newPosition:Number = _navigator.x + (moving.globalX - lastGlobalX);
 					_navigator.isQuickHitAreaEnabled = true;
 					if (newPosition >= _list.width)
 						_navigator.x = _list.width;
@@ -123,17 +159,17 @@ package view
 						_navigator.x = 0;
 					else
 						_navigator.x = newPosition;
-					lastGlobaxX = moving.globalX;
+					lastGlobalX = moving.globalX;
 				}
 			}
-			if (end)
+			if (end && !isNaN(lastGlobalX))
 			{
 				if (_navigator.x > (_list.width / 2))
-					openList_handler(null);
+					_listOpenSignal.dispacth(true);
 				else
-					closeList_handler(null);
-				lastGlobaxX = NaN;
-				lastGlobaxX = NaN;
+					_listOpenSignal.dispacth(false);
+				lastGlobalX = NaN;
+				lastGlobalX = NaN;
 			}
 		}
 		
@@ -148,14 +184,20 @@ package view
 		
 		private function openList_handler(event:Event):void
 		{
-			TweenLite.to(_navigator, 0.3, {x: _list.width, ease: Sine.easeOut});
-			_navigator.isQuickHitAreaEnabled = false;
+			if (_navigator)
+			{
+				TweenLite.to(_navigator, 0.3, {x: _list.width, ease: Sine.easeOut});
+				_navigator.isQuickHitAreaEnabled = false;
+			}
 		}
 		
 		private function closeList_handler(event:Event):void
 		{
-			TweenLite.to(_navigator, 0.3, {x: 0, ease: Sine.easeOut});
-			_navigator.isQuickHitAreaEnabled = false;
+			if (_navigator)
+			{
+				TweenLite.to(_navigator, 0.3, {x: 0, ease: Sine.easeOut});
+				_navigator.isQuickHitAreaEnabled = false;
+			}
 		}
 		
 		private function addedToStageHandler(event:Event):void

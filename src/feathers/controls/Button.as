@@ -144,6 +144,7 @@ package feathers.controls
 		 * @see feathers.core.IFeathersControl#nameList
 		 */
 		public static const ALTERNATE_NAME_DANGER_BUTTON:String = "feathers-danger-button";
+		public static const ALTERNATE_NAME_CLOSE_BUTTON:String = "feathers-close-button";
 
 		/**
 		 * An alternate name to use with Button to allow a theme to give it

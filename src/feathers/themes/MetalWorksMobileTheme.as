@@ -110,8 +110,8 @@ package feathers.themes
 		protected static const TAB_BACKGROUND_COLOR:uint = 0x1a1816;
 		protected static const TAB_DISABLED_BACKGROUND_COLOR:uint = 0x292624;
 		protected static const MODAL_OVERLAY_COLOR:uint = 0x1a1816;
-		protected static const GROUPED_LIST_HEADER_BACKGROUND_COLOR:uint = 0xebebeb;
-		protected static const GROUPED_LIST_FOOTER_BACKGROUND_COLOR:uint = 0xebebeb;
+		protected static const GROUPED_LIST_HEADER_BACKGROUND_COLOR:uint = 0x6285ad;
+		protected static const GROUPED_LIST_FOOTER_BACKGROUND_COLOR:uint = 0x6285ad;
 
 		protected static const ORIGINAL_DPI_IPHONE_RETINA:int = 326;
 		protected static const ORIGINAL_DPI_IPAD_RETINA:int = 264;
@@ -185,6 +185,9 @@ package feathers.themes
 
 		protected var headerTextFormat:TextFormat;
 
+		protected var tinyUIDarkTextFormat:TextFormat;
+		protected var tinyUILightTextFormat:TextFormat;
+		
 		protected var smallUIDarkTextFormat:TextFormat;
 		protected var smallUILightTextFormat:TextFormat;
 		protected var smallUISelectedTextFormat:TextFormat;
@@ -328,6 +331,9 @@ package feathers.themes
 
 			this.headerTextFormat = new TextFormat(semiboldFontNames, Math.round(36 * this.scale), DARK_TEXT_COLOR, true);
 
+			this.tinyUILightTextFormat = new TextFormat(semiboldFontNames, 28 * this.scale, LIGHT_TEXT_COLOR, true)
+			this.tinyUIDarkTextFormat = new TextFormat(semiboldFontNames, 28 * this.scale, DARK_TEXT_COLOR, true)
+			
 			this.smallUIDarkTextFormat = new TextFormat(semiboldFontNames, 36 * this.scale, DARK_TEXT_COLOR, true);
 			this.smallUILightTextFormat = new TextFormat(semiboldFontNames, 36 * this.scale, LIGHT_TEXT_COLOR, true);
 			this.smallUISelectedTextFormat = new TextFormat(semiboldFontNames, 36 * this.scale, SELECTED_TEXT_COLOR, true);
@@ -463,6 +469,7 @@ package feathers.themes
 			this.setInitializerForClass(Button, callToActionButtonInitializer, Button.ALTERNATE_NAME_CALL_TO_ACTION_BUTTON);
 			this.setInitializerForClass(Button, quietButtonInitializer, Button.ALTERNATE_NAME_QUIET_BUTTON);
 			this.setInitializerForClass(Button, dangerButtonInitializer, Button.ALTERNATE_NAME_DANGER_BUTTON);
+			this.setInitializerForClass(Button, closeButtonInitializer, Button.ALTERNATE_NAME_CLOSE_BUTTON);
 			this.setInitializerForClass(Button, backButtonInitializer, Button.ALTERNATE_NAME_BACK_BUTTON);
 			this.setInitializerForClass(Button, listButtonInitializer, Button.ALTERNATE_NAME_LIST_BUTTON);
 			this.setInitializerForClass(Button, forwardButtonInitializer, Button.ALTERNATE_NAME_FORWARD_BUTTON);
@@ -484,9 +491,16 @@ package feathers.themes
 			this.setInitializerForClass(DefaultGroupedListItemRenderer, insetFirstItemRendererInitializer, GroupedList.ALTERNATE_CHILD_NAME_INSET_FIRST_ITEM_RENDERER);
 			this.setInitializerForClass(DefaultGroupedListItemRenderer, insetLastItemRendererInitializer, GroupedList.ALTERNATE_CHILD_NAME_INSET_LAST_ITEM_RENDERER);
 			this.setInitializerForClass(DefaultGroupedListItemRenderer, insetSingleItemRendererInitializer, GroupedList.ALTERNATE_CHILD_NAME_INSET_SINGLE_ITEM_RENDERER);
+			
+			this.setInitializerForClass(DefaultGroupedListItemRenderer, insetItineraryMiddleItemRendererInitializer, GroupedList.ITINERARY_CHILD_NAME_INSET_ITEM_RENDERER);
+			this.setInitializerForClass(DefaultGroupedListItemRenderer, insetItinearyFirstItemRendererInitializer, GroupedList.ITINERARY_CHILD_NAME_INSET_FIRST_ITEM_RENDERER);
+			this.setInitializerForClass(DefaultGroupedListItemRenderer, insetItineraryLastItemRendererInitializer, GroupedList.ITINERARY_CHILD_NAME_INSET_LAST_ITEM_RENDERER);
+			this.setInitializerForClass(DefaultGroupedListItemRenderer, insetItinerarySingleItemRendererInitializer, GroupedList.ITINERARY_CHILD_NAME_INSET_SINGLE_ITEM_RENDERER);
+			
 			this.setInitializerForClass(DefaultGroupedListHeaderOrFooterRenderer, headerRendererInitializer);
 			this.setInitializerForClass(DefaultGroupedListHeaderOrFooterRenderer, footerRendererInitializer, GroupedList.DEFAULT_CHILD_NAME_FOOTER_RENDERER);
 			this.setInitializerForClass(DefaultGroupedListHeaderOrFooterRenderer, insetHeaderRendererInitializer, GroupedList.ALTERNATE_CHILD_NAME_INSET_HEADER_RENDERER);
+			this.setInitializerForClass(DefaultGroupedListHeaderOrFooterRenderer, insetItineraryHeaderRendererInitializer, GroupedList.ITINERARY_CHILD_NAME_INSET_HEADER_RENDERER);
 			this.setInitializerForClass(DefaultGroupedListHeaderOrFooterRenderer, insetFooterRendererInitializer, GroupedList.ALTERNATE_CHILD_NAME_INSET_FOOTER_RENDERER);
 			this.setInitializerForClass(Radio, radioInitializer);
 			this.setInitializerForClass(Check, checkInitializer);
@@ -505,6 +519,7 @@ package feathers.themes
 			this.setInitializerForClass(List, pickerListListInitializer, PickerList.DEFAULT_CHILD_NAME_LIST);
 			this.setInitializerForClass(GroupedList, groupedListInitializer);
 			this.setInitializerForClass(GroupedList, insetGroupedListInitializer, GroupedList.ALTERNATE_NAME_INSET_GROUPED_LIST);
+			this.setInitializerForClass(GroupedList, insetItineraryGroupedListInitializer, GroupedList.ITINERARY_NAME_INSET_GROUPED_LIST);
 			this.setInitializerForClass(Panel, panelInitializer);
 			this.setInitializerForClass(ScrollContainer, scrollContainerInitializer);
 			this.setInitializerForClass(ScrollContainer, scrollContainerToolbarInitializer, ScrollContainer.ALTERNATE_NAME_TOOLBAR);
@@ -614,15 +629,15 @@ package feathers.themes
 
 		protected function baseButtonInitializer(button:Button):void
 		{
-			button.defaultLabelProperties.textFormat = this.smallUILightTextFormat;
+			button.defaultLabelProperties.textFormat = this.largeUILightTextFormat;
 			button.defaultLabelProperties.embedFonts = true;
-			button.disabledLabelProperties.textFormat = this.smallUILightDisabledTextFormat;
+			button.disabledLabelProperties.textFormat = this.largeUIDisabledTextFormat;
 			button.disabledLabelProperties.embedFonts = true;
-			button.selectedDisabledLabelProperties.textFormat = this.smallUILightDisabledTextFormat;
+			button.selectedDisabledLabelProperties.textFormat = this.largeUILightTextFormat;
 			button.selectedDisabledLabelProperties.embedFonts = true;
 
-			button.paddingTop = button.paddingBottom = 8 * this.scale;
-			button.paddingLeft = button.paddingRight = 16 * this.scale;
+			button.paddingTop = button.paddingBottom = 16 * this.scale;
+			button.paddingLeft = button.paddingRight = 32 * this.scale;
 			//button.gap = 12 * this.scale;
 			button.minWidth = button.minHeight = 60 * this.scale;
 			button.minTouchWidth = button.minTouchHeight = 88 * this.scale;
@@ -645,7 +660,7 @@ package feathers.themes
 			button.stateToSkinFunction = skinSelector.updateValue;
 			this.baseButtonInitializer(button);
 		}
-
+		
 		protected function callToActionButtonInitializer(button:Button):void
 		{
 			const skinSelector:SmartDisplayObjectStateValueSelector = new SmartDisplayObjectStateValueSelector();
@@ -678,6 +693,28 @@ package feathers.themes
 			this.baseButtonInitializer(button);
 		}
 
+		protected function closeButtonInitializer(button:Button):void
+		{
+			const skinSelector:SmartDisplayObjectStateValueSelector = new SmartDisplayObjectStateValueSelector();
+			skinSelector.defaultValue = this.buttonDangerUpSkinTextures;
+			skinSelector.setValueForState(this.buttonDangerDownSkinTextures, Button.STATE_DOWN, false);
+			skinSelector.setValueForState(this.buttonDisabledSkinTextures, Button.STATE_DISABLED, false);
+			skinSelector.displayObjectProperties =
+				{
+					width: 60 * this.scale,
+						height: 60 * this.scale,
+						textureScale: this.scale
+				};
+			button.stateToSkinFunction = skinSelector.updateValue;
+			this.baseButtonInitializer(button);
+			
+			button.paddingTop = button.paddingBottom = 5 * this.scale;
+			button.paddingLeft = button.paddingRight = 5 * this.scale;
+			//button.gap = 12 * this.scale;
+			button.minWidth = button.minHeight = 10 * this.scale;
+			button.minTouchWidth = button.minTouchHeight = 10 * this.scale;
+		}
+		
 		protected function dangerButtonInitializer(button:Button):void
 		{
 			const skinSelector:SmartDisplayObjectStateValueSelector = new SmartDisplayObjectStateValueSelector();
@@ -772,13 +809,14 @@ package feathers.themes
 		protected function pickerListButtonInitializer(button:Button):void
 		{
 			this.buttonInitializer(button);
-
+			
 			const defaultIcon:ImageLoader = new ImageLoader();
 			defaultIcon.source = this.pickerListButtonIconTexture;
 			defaultIcon.textureScale = this.scale;
 			defaultIcon.snapToPixels = true;
 			button.defaultIcon = defaultIcon;
-
+			button.minHeight = 80 * this.scale;
+			
 			button.gap = Number.POSITIVE_INFINITY;
 			button.iconPosition = Button.ICON_POSITION_RIGHT;
 		}
@@ -875,8 +913,9 @@ package feathers.themes
 		protected function pickerListItemRendererInitializer(renderer:BaseDefaultItemRenderer):void
 		{
 			const skinSelector:SmartDisplayObjectStateValueSelector = new SmartDisplayObjectStateValueSelector();
-			skinSelector.defaultValue = this.itemRendererUpSkinTextures;
-			skinSelector.setValueForState(this.itemRendererSelectedSkinTextures, Button.STATE_DOWN, false);
+			skinSelector.defaultValue = this.insetItemRendererMiddleUpSkinTextures;
+			skinSelector.setValueForState(this.insetItemRendererMiddleSelectedSkinTextures, Button.STATE_DOWN, false);
+			skinSelector.defaultSelectedValue = this.insetItemRendererMiddleSelectedSkinTextures;
 			skinSelector.displayObjectProperties =
 			{
 				width: 88 * this.scale,
@@ -885,26 +924,22 @@ package feathers.themes
 			};
 			renderer.stateToSkinFunction = skinSelector.updateValue;
 
-			const defaultSelectedIcon:Image = new Image(this.pickerListItemSelectedIconTexture);
-			defaultSelectedIcon.scaleX = defaultSelectedIcon.scaleY = this.scale;
-			renderer.defaultSelectedIcon = defaultSelectedIcon;
-
-			const defaultIcon:Quad = new Quad(defaultSelectedIcon.width, defaultSelectedIcon.height, 0xff00ff);
-			defaultIcon.alpha = 0;
-			renderer.defaultIcon = defaultIcon;
+//			const defaultSelectedIcon:Image = new Image(this.pickerListItemSelectedIconTexture);
+//			defaultSelectedIcon.scaleX = defaultSelectedIcon.scaleY = this.scale;
+//			renderer.defaultSelectedIcon = defaultSelectedIcon;
 
 			renderer.defaultLabelProperties.textFormat = this.largeLightTextFormat;
 			renderer.defaultLabelProperties.embedFonts = true;
 			renderer.downLabelProperties.textFormat = this.largeDarkTextFormat;
 			renderer.downLabelProperties.embedFonts = true;
 
-			renderer.itemHasIcon = false;
+//			renderer.itemHasIcon = false;
 			renderer.horizontalAlign = Button.HORIZONTAL_ALIGN_LEFT;
 			renderer.paddingTop = renderer.paddingBottom = 8 * this.scale;
 			renderer.paddingLeft = 32 * this.scale;
 			renderer.paddingRight = 24 * this.scale;
-			renderer.gap = Number.POSITIVE_INFINITY;
-			renderer.iconPosition = Button.ICON_POSITION_RIGHT;
+			renderer.gap = 10 * this.scale;//Number.POSITIVE_INFINITY;
+			renderer.iconPosition = Button.ICON_POSITION_LEFT;
 			renderer.accessoryGap = Number.POSITIVE_INFINITY;
 			renderer.accessoryPosition = BaseDefaultItemRenderer.ACCESSORY_POSITION_RIGHT;
 			renderer.minWidth = renderer.minHeight = 88 * this.scale;
@@ -946,10 +981,56 @@ package feathers.themes
 			renderer.accessoryLoaderFactory = this.imageLoaderFactory;
 			renderer.iconLoaderFactory = this.imageLoaderFactory;
 		}
+		
+		protected function tinyInsetItemRendererInitializer(renderer:DefaultGroupedListItemRenderer, defaultSkinTextures:Scale9Textures, selectedAndDownSkinTextures:Scale9Textures):void
+		{
+			const skinSelector:SmartDisplayObjectStateValueSelector = new SmartDisplayObjectStateValueSelector();
+			skinSelector.defaultValue = defaultSkinTextures;
+			skinSelector.defaultSelectedValue = selectedAndDownSkinTextures;
+			skinSelector.setValueForState(selectedAndDownSkinTextures, Button.STATE_DOWN, false);
+			skinSelector.displayObjectProperties =
+				{
+					width: 50 * this.scale,
+						height: 50 * this.scale,
+						textureScale: this.scale
+				};
+			renderer.stateToSkinFunction = skinSelector.updateValue;
+			
+			renderer.defaultLabelProperties.textFormat = this.tinyUIDarkTextFormat;
+			renderer.defaultLabelProperties.embedFonts = true;
+			renderer.downLabelProperties.textFormat = this.tinyUIDarkTextFormat;
+			renderer.downLabelProperties.embedFonts = true;
+			renderer.defaultSelectedLabelProperties.textFormat = this.tinyUIDarkTextFormat;
+			renderer.defaultSelectedLabelProperties.embedFonts = true;
+			
+			renderer.horizontalAlign = Button.HORIZONTAL_ALIGN_LEFT;
+			renderer.paddingTop = renderer.paddingBottom = 8 * this.scale;
+			renderer.paddingLeft = 32 * this.scale;
+			renderer.paddingRight = 24 * this.scale;
+			renderer.gap = 20 * this.scale;
+			renderer.iconPosition = Button.ICON_POSITION_LEFT;
+			renderer.accessoryGap = Number.POSITIVE_INFINITY;
+			renderer.accessoryPosition = BaseDefaultItemRenderer.ACCESSORY_POSITION_RIGHT;
+			renderer.minWidth = renderer.minHeight = 50 * this.scale;
+			renderer.minTouchWidth = renderer.minTouchHeight = 50 * this.scale;
+			
+			renderer.accessoryLoaderFactory = this.imageLoaderFactory;
+			renderer.iconLoaderFactory = this.imageLoaderFactory;
+		}
 
+		protected function insetItineraryMiddleItemRendererInitializer(renderer:DefaultGroupedListItemRenderer):void
+		{
+			this.tinyInsetItemRendererInitializer(renderer, this.insetItemRendererMiddleUpSkinTextures, this.insetItemRendererMiddleSelectedSkinTextures);
+		}
+		
 		protected function insetMiddleItemRendererInitializer(renderer:DefaultGroupedListItemRenderer):void
 		{
 			this.insetItemRendererInitializer(renderer, this.insetItemRendererMiddleUpSkinTextures, this.insetItemRendererMiddleSelectedSkinTextures);
+		}
+
+		protected function insetItinearyFirstItemRendererInitializer(renderer:DefaultGroupedListItemRenderer):void
+		{
+			this.tinyInsetItemRendererInitializer(renderer, this.insetItemRendererMiddleUpSkinTextures, this.insetItemRendererMiddleSelectedSkinTextures);
 		}
 
 		protected function insetFirstItemRendererInitializer(renderer:DefaultGroupedListItemRenderer):void
@@ -957,11 +1038,23 @@ package feathers.themes
 			this.insetItemRendererInitializer(renderer, this.insetItemRendererMiddleUpSkinTextures, this.insetItemRendererMiddleSelectedSkinTextures);
 		}
 
+		protected function insetItineraryLastItemRendererInitializer(renderer:DefaultGroupedListItemRenderer):void
+		{
+			this.tinyInsetItemRendererInitializer(renderer, this.insetItemRendererMiddleUpSkinTextures, this.insetItemRendererMiddleSelectedSkinTextures);
+		}
+		
 		protected function insetLastItemRendererInitializer(renderer:DefaultGroupedListItemRenderer):void
 		{
 			this.insetItemRendererInitializer(renderer, this.insetItemRendererMiddleUpSkinTextures, this.insetItemRendererMiddleSelectedSkinTextures);
 		}
 
+		protected function insetItinerarySingleItemRendererInitializer(renderer:DefaultGroupedListItemRenderer):void
+		{
+			this.tinyInsetItemRendererInitializer(renderer, this.insetItemRendererMiddleUpSkinTextures, this.insetItemRendererMiddleSelectedSkinTextures);
+			renderer.paddingLeft = 15 * this.scale;
+
+		}
+		
 		protected function insetSingleItemRendererInitializer(renderer:DefaultGroupedListItemRenderer):void
 		{
 			this.insetItemRendererInitializer(renderer, this.insetItemRendererMiddleUpSkinTextures, this.insetItemRendererMiddleSelectedSkinTextures);
@@ -983,6 +1076,22 @@ package feathers.themes
 			renderer.contentLoaderFactory = this.imageLoaderFactory;
 		}
 
+		protected function insetItineraryHeaderRendererInitializer(renderer:DefaultGroupedListHeaderOrFooterRenderer):void
+		{
+			const defaultSkin:Quad = new Quad(44 * this.scale, 44 * this.scale, GROUPED_LIST_HEADER_BACKGROUND_COLOR);
+			renderer.backgroundSkin = defaultSkin;
+			
+			renderer.horizontalAlign = DefaultGroupedListHeaderOrFooterRenderer.HORIZONTAL_ALIGN_LEFT;
+			renderer.contentLabelProperties.textFormat = this.tinyUIDarkTextFormat;
+			renderer.contentLabelProperties.embedFonts = true;
+			renderer.paddingTop = renderer.paddingBottom = 4 * this.scale;
+			renderer.paddingLeft = renderer.paddingRight = 16 * this.scale;
+			renderer.minWidth = renderer.minHeight = 44 * this.scale;
+			renderer.minTouchWidth = renderer.minTouchHeight = 44 * this.scale;
+			
+			renderer.contentLoaderFactory = this.imageLoaderFactory;
+		}
+		
 		protected function footerRendererInitializer(renderer:DefaultGroupedListHeaderOrFooterRenderer):void
 		{
 			const defaultSkin:Quad = new Quad(44 * this.scale, 44 * this.scale, GROUPED_LIST_FOOTER_BACKGROUND_COLOR);
@@ -1293,7 +1402,7 @@ package feathers.themes
 
 			list.listProperties.itemRendererName = COMPONENT_NAME_PICKER_LIST_ITEM_RENDERER;
 		}
-
+		
 		protected function calloutInitializer(callout:Callout):void
 		{
 			const backgroundSkin:Scale9Image = new Scale9Image(this.backgroundPopUpSkinTextures, this.scale);
@@ -1389,6 +1498,31 @@ package feathers.themes
 			container.horizontalScrollBarFactory = this.horizontalScrollBarFactory;
 		}
 
+		protected function insetItineraryGroupedListInitializer(list:GroupedList):void
+		{
+			const backgroundSkin:Quad = new Quad(100, 100, LIST_BACKGROUND_COLOR);
+			list.backgroundSkin = backgroundSkin;
+			
+			list.itemRendererName = GroupedList.ITINERARY_CHILD_NAME_INSET_ITEM_RENDERER;
+			list.firstItemRendererName = GroupedList.ITINERARY_CHILD_NAME_INSET_FIRST_ITEM_RENDERER;
+			list.lastItemRendererName = GroupedList.ITINERARY_CHILD_NAME_INSET_LAST_ITEM_RENDERER;
+			list.singleItemRendererName = GroupedList.ITINERARY_CHILD_NAME_INSET_SINGLE_ITEM_RENDERER;
+			list.headerRendererName = GroupedList.ITINERARY_CHILD_NAME_INSET_HEADER_RENDERER;
+			list.footerRendererName = GroupedList.ALTERNATE_CHILD_NAME_INSET_FOOTER_RENDERER;
+			
+			const layout:VerticalLayout = new VerticalLayout();
+			layout.useVirtualLayout = true;
+			layout.paddingRight = 18 * this.scale;
+			layout.gap = 0;
+			layout.horizontalAlign = VerticalLayout.HORIZONTAL_ALIGN_JUSTIFY;
+			layout.verticalAlign = VerticalLayout.VERTICAL_ALIGN_TOP;
+			layout.manageVisibility = true;
+			list.layout = layout;
+			
+			list.verticalScrollBarFactory = this.verticalScrollBarFactory;
+			list.horizontalScrollBarFactory = this.horizontalScrollBarFactory;
+		}
+		
 		protected function insetGroupedListInitializer(list:GroupedList):void
 		{
 			list.itemRendererName = GroupedList.ALTERNATE_CHILD_NAME_INSET_ITEM_RENDERER;
