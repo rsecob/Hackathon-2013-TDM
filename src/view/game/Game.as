@@ -3,6 +3,11 @@ package view.game
 	import com.gamua.flox.Flox;
 	import com.gamua.flox.Player;
 	
+	import flash.display.StageAlign;
+	import flash.display.StageAspectRatio;
+	import flash.display.StageScaleMode;
+	
+	import starling.core.Starling;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.text.TextField;
@@ -20,13 +25,23 @@ package view.game
 		
 		public function set scenario(scenario:GameScenario):void
 		{
-			this._scenario = scenario;	
+			this._scenario = scenario;
 		}
 		
 		public function Game()
 		{
-			Flox.init("6bMjTGNEfCLGNA0p", "pfaXoM1llQNtzgjJ", "0.9");
+			//Flox.init("6bMjTGNEfCLGNA0p", "pfaXoM1llQNtzgjJ", "0.9");
+			trace("Game constructor");
+			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		}
+		
+		public function onAddedToStage() : void
+		{
+			trace("Game added to stage");
+			stage.color = 0x5caacc;
 			this.changeGameState(LOADING_STATE);
+			Starling.current.nativeStage.setAspectRatio(StageAspectRatio.LANDSCAPE);
+			Starling.current.nativeStage.autoOrients = true; // test to see if working ?
 		}
 		
 		public function changeGameState(newState:int) : void
@@ -39,6 +54,7 @@ package view.game
 				case LOADING_STATE:
 					this._scene = new GameLoading(this);
 					this._scene.addEventListener(GameLoading.COMPLETE_EVENT, onLoadingComplete);
+					(this._scene as GameLoading).launch();
 				break;
 				case PLAYING_STATE:
 					this._scene = new GamePlaying(this);
@@ -49,6 +65,7 @@ package view.game
 
 		public function onLoadingComplete(e:Event):void
 		{
+			trace("Loading complete");
 			this.changeGameState(PLAYING_STATE);
 		}
 		
