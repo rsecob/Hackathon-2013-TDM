@@ -234,7 +234,7 @@ package view.itinerary
 				return;
 			}
 			
-			var apiLoader:APILoader = new APILoader(APIData.API_ITINERARY_URL, URLRequestMethod.POST, APIData.API_ITINERARY_CONTENT_TYPE);
+			var apiLoader:APILoader = new APILoader(APIData.API_ITINERARY_URL, URLRequestMethod.POST);
 			
 			if (_currentLocation)
 			{

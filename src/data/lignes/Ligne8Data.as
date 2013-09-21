@@ -27,43 +27,29 @@ package data.lignes
 		////////////////////////////////
 		
 		
-		private static var _ligneData:Object;
-		
-		public static function get ligneData():Object
-		{
-			if (!_ligneData)
-				_ligneData = {value: "8", label: "Ligne 8", icon: EmbeddedAssets.LIGNE_8_ICON };
-			
-			return _ligneData;
-		}
-		
 		private static var _data:ListCollection;
 		
 		public static function get data():ListCollection
 		{
 			if (!_data)
 			{
-				_data = new ListCollection([{value: "Chambery", lat: "undefined", lon: "undefined", label: "Chambéry" }
-					, {value: "Cite De L'arme", lat: "undefined", lon: "undefined", label: "Cité de l'Arme" }
-					, {value: "Cite Mion", lat: "undefined", lon: "undefined", label: "Cité Mion" }
-					, {value: "Col. Aiguerelles", lat: "undefined", lon: "undefined", label: "Collège des Aiguerelles" }
-					, {value: "Frederic Bazille", lat: "undefined", lon: "undefined", label: "Frédéric Bazille" }
-					, {value: "Gare Saint-roch", lat: "undefined", lon: "undefined", label: "Gare Saint-Roch" }
-					, {value: "Helios", lat: "undefined", lon: "undefined", label: "Helios" }
-					, {value: "Henri Rene", lat: "undefined", lon: "undefined", label: "Henri René" }
-					, {value: "Jean Mirailhet", lat: "undefined", lon: "undefined", label: "Jean Mirailhet" }
-					, {value: "Lucullus", lat: "undefined", lon: "undefined", label: "Lucullus" }
-					, {value: "Place Carnot", lat: "undefined", lon: "undefined", label: "Place Carnot" }
-					, {value: "Place Strasbourg", lat: "undefined", lon: "undefined", label: "Place de Strasbourg" }
-					, {value: "Soleiado", lat: "undefined", lon: "undefined", label: "Soleiado" } ]);
+				_data = new ListCollection([ { label: "Chambéry", id_1: "341", id_2: "312", lat: "43.5988957676535", lng: "3.88975524434921" },
+					{ label: "Cité de l'Arme", id_1: "106", lat: "43.593626969366", lng: "3.88919150114047" },
+					{ label: "Cité Mion", id_1: "71", lat: "43.6013411253374", lng: "3.88472519310408" },
+					{ label: "Collège des Aiguerelles", id_1: "311", id_2: "342", lat: "43.5982761169694", lng: "3.89096298648582" },
+					{ label: "Frédéric Bazille", id_1: "557", lat: "43.6027043748847", lng: "3.88054379500569" },
+					{ label: "Gare Saint-Roch", id_1: "4", id_2: "2", lat: "43.604132144047", lng: "3.87813296304905" },
+					{ label: "Hélios", id_1: "339", lat: "43.6010230298201", lng: "3.88559485359729" },
+					{ label: "Henri René", id_1: "327", lat: "43.6031682633384", lng: "3.88205317273247" },
+					{ label: "Jean Mirailhet", id_1: "416", id_2: "310", lat: "43.5968243984061", lng: "3.89251912721603" },
+					{ label: "Lucullus", id_1: "105", lat: "43.5946977939189", lng: "3.88849083951096" },
+					{ label: "Place Carnot", id_1: "326", lat: "43.6033043854567", lng: "3.88385059559379" },
+					{ label: "Place de Strasbourg", id_1: "72", lat: "43.6031697265646", lng: "3.88006154730388" },
+					{ label: "Soleiado", id_1: "340", id_2: "313", lat: "43.6003285232027", lng: "3.8870109434519" } ]);
 			}
 			
 			return _data;
 		}
-		
-		
-		public static var directionsArray:Array = [ {value: "Cite De L'arme", label: "Cité de l'Arme"}
-			,{value: "Gare Saint-roch", label: "Gare Saint-Roch"} ];
 		
 	}
 }

@@ -1,5 +1,7 @@
 package view.home
 {
+	import core.Signal;
+	
 	import feathers.controls.Button;
 	import feathers.controls.Header;
 	import feathers.controls.ImageLoader;
@@ -13,6 +15,8 @@ package view.home
 	import feathers.themes.MetalWorksMobileTheme;
 	
 	import flash.utils.setTimeout;
+	
+	import signal.HomeSignal;
 	
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
@@ -31,6 +35,8 @@ package view.home
 			super();
 			
 			this.addEventListener(FeathersEventType.INITIALIZE, initializeHandler);
+			this.addEventListener(Event.REMOVED, removed_handler);
+
 			this.headerProperties.title = "Transports de Montpellier";
 			this.headerProperties.titleAlign = Header.TITLE_ALIGN_PREFER_LEFT;
 		}
@@ -54,6 +60,10 @@ package view.home
 		private var _timeButton:Button;
 		private var _itineraryButton:Button;
 		private var _markerButton:Button;
+		
+		// Selected Button
+		
+		private var _listButtonSignal:Signal;
 		
 		/////////////////////////////////
 		// Methods
@@ -110,7 +120,7 @@ package view.home
 				this._listButton = new Button();
 				this._listButton.nameList.add(Button.ALTERNATE_NAME_LIST_BUTTON);
 				this._listButton.isToggle = true;
-				this._listButton.addEventListener(Event.TRIGGERED, listButton_clickHandler);
+				this._listButton.addEventListener(Event.CHANGE, listButton_clickHandler);
 				//				this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
 				
 				this.headerProperties.leftItems = new <DisplayObject>
@@ -122,9 +132,27 @@ package view.home
 			}
 		}
 		
+		private function initSignalHandlers():void
+		{
+			_listButtonSignal = HomeSignal.listButtonSignal;
+			
+			_listButtonSignal.add(list_openCloseHandler);
+		}
+		
 		/////////////////////////////////
 		// Event Handler
 		/////////////////////////////////
+		
+		private function removed_handler():void
+		{
+			_listButtonSignal.remove(list_openCloseHandler);
+			this.removeEventListener(Event.REMOVED, removed_handler);
+		}
+		
+		private function list_openCloseHandler(isOpen:Boolean):void
+		{
+			_listButton.isSelected = isOpen;
+		}
 		
 		private function itineraryButton_clickHandler():void
 		{
@@ -138,10 +166,10 @@ package view.home
 		
 		private function listButton_clickHandler():void
 		{
-//			if (_listButton.isSelected)
-//				dispatchEventWith(CLOSE_LIST, true);
-//			else
-//				dispatchEventWith(OPEN_LIST, true);
+			if (_listButton.isSelected)
+				_listButtonSignal.dispacth(true);
+			else
+				_listButtonSignal.dispacth(false);
 		}
 		
 		private function initializeHandler(event:Event):void
@@ -158,7 +186,9 @@ package view.home
 			this.layout = _tiledLayout;
 			
 			initButton();
+			initSignalHandlers();
 		}
+		
 		
 		private function button_resize_handler(event:Event):void
 		{

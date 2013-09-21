@@ -15,7 +15,7 @@ package core
 		// Constructor
 		/////////////////////////
 
-		public function APILoader(url:String, method:String, contentType:String)
+		public function APILoader(url:String, method:String)
 		{
 			_loader = new URLLoader();
 			_request = new URLRequest(url);

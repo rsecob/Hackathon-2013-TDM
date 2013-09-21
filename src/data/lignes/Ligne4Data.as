@@ -26,46 +26,34 @@ package data.lignes
 		//
 		////////////////////////////////
 		
-		private static var _ligneData:Object;
-		
-		public static function get ligneData():Object
-		{
-			if (!_ligneData)
-				_ligneData = {value: "4", label: "Ligne 4", color: EmbeddedAssets.LIGNE_4_ICON};
-			
-			return _ligneData;
-		}
-		
 		private static var _data:ListCollection;
 		
 		public static function get data():ListCollection
 		{
 			if (!_data)
 			{
-				_data = new ListCollection([ {value: "Albert 1er", lat: "43.6165153431063", lon: "3.87407454752208", label: "Place Albert 1er"}
-					,{value: "Louis Blanc", lat: "43.6147452179528", lon: "3.87812239265931", label: "Louis Blanc"}
-					,{value: "Corum T1", lat: "43.6142802818104", lon: "3.88191577851311", label: "Corum"}
-					,{value: "Les Aubes", lat: "43.6138605371549", lon: "3.88860002739814", label: "Les Aubes"}
-					,{value: "Pompignane", lat: "43.6127334667416", lon: "3.89493206402159", label: "Pompignane"}
-					,{value: "Pl. De L'europ", lat: "43.6077163182588", lon: "3.89405785651245", label: "Place de l'Europe"}
-					,{value: "Rives Du Lez T1", lat: "43.6040853836827", lon: "3.89446422116891", label: "Rives du Lez"}
-					,{value: "Hotel De Ville", lat: "43.6139164528074", lon: "3.80521187339071", label: "Georges Frêche - Hôtel de Ville"}
-					,{value: "La Rauze", lat: "43.5936138743612", lon: "3.8957711811221", label: "La Rauze"}
-					,{value: "Garcia Lorca", lat: "43.5907999379787", lon: "3.8904751287886", label: "Garcia Lorca"}
-					,{value: "Restanque", lat: "43.5903936546899", lon: "3.8852695849143", label: "Restanque"}
-					,{value: "Saint-martin", lat: "43.5922337199633", lon: "3.88043400477089", label: "Saint-Martin"}
-					,{value: "Nouveau St Roch", lat: "43.599395112599", lon: "3.87561775687671", label: "Nouveau Saint-Roch"}
-					,{value: "Rondelet", lat: "43.6034872110247", lon: "3.87548882128635", label: "Rondelet"}
-					,{value: "Gare St-roch T3", lat: "43.6051626028276", lon: "3.87967353379184", label: "Gare Saint-Roch"}
-					,{value: "Observatoire", lat: "43.6064049501532", lon: "3.87670970189679", label: "Observatoire"}
-					,{value: "Saint-denis", lat: "43.6056360717793", lon: "3.87388382293218", label: "Saint-Denis"} ]);
+				_data = new ListCollection([ { label: "Corum", id_1: "1158", id_2: "1185", lat: "43.6142538878797", lng: "3.88195716825633" },
+					{ label: "Garcia Lorca", id_1: "1282", id_2: "1300", lat: "43.5910407295796", lng: "3.89087748719573" },
+					{ label: "Gare Saint-Roch", id_1: "1279", id_2: "1303", lat: "43.605351081248", lng: "3.87965038044627" },
+					{ label: "Georges Frêche Hôtel de Ville", id_1: "1298", id_2: "1284", lat: "43.5993528646136", lng: "3.89485165719292" },
+					{ label: "La Rauze", id_1: "1283", id_2: "1299", lat: "43.5934705270149", lng: "3.8956930946039" },
+					{ label: "Les Aubes", id_1: "1219", id_2: "1248", lat: "43.6139711840498", lng: "3.88851955268758" },
+					{ label: "Louis Blanc", id_1: "1186", id_2: "1157", lat: "43.614736216221", lng: "3.87839439343216" },
+					{ label: "Nouveau Saint-Roch", id_1: "1213", id_2: "1254", lat: "43.5994929707284", lng: "3.87564516827548" },
+					{ label: "Observatoire", id_1: "1278", id_2: "1304", lat: "43.6064472174367", lng: "3.87653767936612" },
+					{ label: "Place Albert 1er", id_1: "1156", id_2: "1187", lat: "43.6164493475913", lng: "3.87424603509102" },
+					{ label: "Place de l'Europe", id_1: "1179", id_2: "1164", lat: "43.6073039939688", lng: "3.89393035868125" },
+					{ label: "Pompignane", id_1: "1249", id_2: "1218", lat: "43.6124501254217", lng: "3.89489962500101" },
+					{ label: "Restanque", id_1: "1301", id_2: "1281", lat: "43.5904335598282", lng: "3.88494913850408" },
+					{ label: "Rives du Lez", id_1: "1165", id_2: "1178", lat: "43.6040712861004", lng: "3.89493087057306" },
+					{ label: "Rondelet", id_1: "1253", id_2: "1214", lat: "43.6030784578395", lng: "3.87637265425441" },
+					{ label: "Saint-Denis", id_1: "1277", lat: "43.6056690419268", lng: "3.87373320298287" },
+					{ label: "Saint-Martin", id_1: "1280", id_2: "1302", lat: "43.5922730822352", lng: "3.88015063500089" } ]);
 			}
 			
 			return _data;
 		}
 		
-		public static var directionsArray:Array = [ {value: "Albert 1er", label: "Place Albert 1er"} 
-									    			,{value: "Saint-denis", label: "Saint-Denis"} ];
 	}
 }
 

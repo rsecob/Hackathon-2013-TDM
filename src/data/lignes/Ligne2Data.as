@@ -26,59 +26,45 @@ package data.lignes
 		//
 		////////////////////////////////
 		
-		private static var _ligneData:Object;
-		
-		public static function get ligneData():Object
-		{
-			if (!_ligneData)
-				_ligneData = {value: "2", label: "Ligne 2", icon: EmbeddedAssets.LIGNE_2_ICON};
-			
-			return _ligneData;
-		}
-		
 		private static var _data:ListCollection;
 		
 		public static function get data():ListCollection
 		{
 			if (!_data)
 			{
-				_data = new ListCollection([ {value: "Jacou", lat: "43.6546675997294", lon: "3.91287901714606", label: "Jacou"}
-					,{value: "Georges Pompidou", lat: "43.6492675103209", lon: "3.9209940235933", label: "Georges Pompidou"}
-					,{value: "Via Domitia", lat: "43.646533744598", lon: "3.9299308869608", label: "Via Domitia"}
-					,{value: "Aube Rouge", lat: "43.638823297571", lon: "3.92463023253584", label: "Aube Rouge"}
-					,{value: "Nd Sablassou", lat: "43.6342167", lon: "3.9222389", label: "Notre-Dame de Sablassou"}
-					,{value: "Centurions", lat: "43.6328121706313", lon: "3.91571036685606", label: "Centurions"}
-					,{value: "La Galine", lat: "43.6314710883365", lon: "3.90902692889704", label: "La Galine"}
-					,{value: "Clairval", lat: "43.6302068915517", lon: "3.90259345465358", label: "Clairval"}
-					,{value: "Ch. De Gaulle", lat: "43.6286278", lon: "3.8977556", label: "Charles de Gaulle"}
-					,{value: "Saint Lazare", lat: "43.6268759405604", lon: "3.88887948575112", label: "Saint-Lazare"}
-					,{value: "Aiguelongue", lat: "43.626288258453", lon: "3.88267570357473", label: "Aiguelongue"}
-					,{value: "Mail Des Abbes", lat: "43.6202114299498", lon: "3.88407346232511", label: "Jeu de Mail des Abbés"}
-					,{value: "Beaux Arts", lat: "43.6170097934758", lon: "3.88353508608718", label: "Beaux-Arts"}
-					,{value: "Corum T2", lat: "43.6142802818104", lon: "3.88191577851311", label: "Corum"}
-					,{value: "Comedie", lat: "43.6083669324149", lon: "3.87970706244691", label: "Comédie"}
-					,{value: "Gare St-roch T1", lat: "43.6051626028276", lon: "3.87967353379184", label: "Gare Saint-Roch"}
-					,{value: "Rondelet", lat: "43.6034872110247", lon: "3.87548882128635", label: "Rondelet"}
-					,{value: "Nouveau St Roch", lat: "43.599395112599", lon: "3.87561775687671", label: "Nouveau Saint-Roch"}
-					,{value: "Saint Cleophas", lat: "43.5952387065616", lon: "3.87597087503277", label: "Saint-Cléophas"}
-					,{value: "Lemasson", lat: "43.5937243564051", lon: "3.87328816206305", label: "Lemasson"}
-					,{value: "Mas Drevon", lat: "43.5954773263634", lon: "3.8678991780415", label: "Mas Drevon"}
-					,{value: "Croix D'argent", lat: "43.592369313903", lon: "3.86646157077226", label: "Croix d'Argent"}
-					,{value: "Vil. D'angoule", lat: "43.5887390354323", lon: "3.86572127816322", label: "Villeneuve d'Angoulême"}
-					,{value: "Sabines", lat: "43.5839248820984", lon: "3.86000905573683", label: "Sabines"}
-					,{value: "Victoire 2", lat: "43.5747900370058", lon: "3.84955881084678", label: "Victoire 2"}
-					,{value: "La Condamine", lat: "43.5716016489988", lon: "3.84420750606309", label: "La Condamine"}
-					,{value: "St Jean Le Sec", lat: "43.570682407301", lon: "3.83759046060594", label: "Saint-Jean le Sec"}
-					,{value: "St Jean Centre", lat: "43.5747533904863", lon: "3.83042612680245", label: "Saint-Jean de Védas Centre"} ]);
+				_data = new ListCollection([ { label: "Aiguelongue", id_1: "1244", id_2: "1223", lat: "43.6262568658232", lng: "3.88309875403403" },
+					{ label: "Aube Rouge", id_1: "1230", id_2: "1237", lat: "43.6385424965602", lng: "3.92493604745572" },
+					{ label: "Beaux-Arts", id_1: "1221", id_2: "1246", lat: "43.6169999109354", lng: "3.88355341465341" },
+					{ label: "Centurions", id_1: "1239", id_2: "1228", lat: "43.6328251150762", lng: "3.91570457225184" },
+					{ label: "Charles de Gaulle", id_1: "1225", id_2: "1242", lat: "43.6285551805181", lng: "3.89771531053076" },
+					{ label: "Clairval", id_1: "1241", id_2: "1226", lat: "43.6302198343012", lng: "3.90258765721135" },
+					{ label: "Comédie", id_1: "1159", id_2: "1184", lat: "43.6083711439975", lng: "3.87968246864816" },
+					{ label: "Corum", id_1: "1247", id_2: "1220", lat: "43.6142642871554", lng: "3.8818584656304" },
+					{ label: "Croix d'Argent", id_1: "1209", id_2: "1258", lat: "43.5923683239865", lng: "3.86648631655454" },
+					{ label: "Gare Saint-Roch", id_1: "1160", id_2: "1183", lat: "43.6057394168241", lng: "3.8801557150493" },
+					{ label: "Georges Pompidou", id_1: "1232", id_2: "1235", lat: "43.6492711127252", lng: "3.92101273052626" },
+					{ label: "Jacou", id_1: "1233", lat: "43.6546040775665", lng: "3.91287729877921" },
+					{ label: "Jeu de Mail des Abbés", id_1: "1222", id_2: "1245", lat: "43.6202104463057", lng: "3.8840982200545" },
+					{ label: "La Condamine", id_1: "1204", id_2: "1263", lat: "43.5716010011206", lng: "3.84420752480811" },
+					{ label: "La Galine", id_1: "1227", id_2: "1240", lat: "43.6314568933244", lng: "3.90903276236359" },
+					{ label: "Lemasson", id_1: "1211", id_2: "1256", lat: "43.5937104131978", lng: "3.87327545449656" },
+					{ label: "Les Grisettes", id_1: "1261", id_2: "1206", lat: "43.5799183240565", lng: "3.85753430891038" },
+					{ label: "Mas Drevon", id_1: "1257", id_2: "1210", lat: "43.5954859359917", lng: "3.86788089130808" },
+					{ label: "Notre-Dame de Sablassou", id_1: "1229", id_2: "1238", lat: "43.6342394895382", lng: "3.9222665979465" },
+					{ label: "Nouveau Saint-Roch", id_1: "1254", id_2: "1213", lat: "43.5995475912133", lng: "3.87559716042538" },
+					{ label: "Rondelet", id_1: "1214", id_2: "1253", lat: "43.6030802177349", lng: "3.87624899612494" },
+					{ label: "Sabines", id_1: "1260", id_2: "1207", lat: "43.5839111950111", lng: "3.85997781084598" },
+					{ label: "Saint-Cléophas", id_1: "1212", id_2: "1255", lat: "43.5949905836087", lng: "3.87617944402288" },
+					{ label: "Saint-Jean de Védas Centre", id_1: "1202", lat: "43.5748036079191", lng: "3.83043159629415" },
+					{ label: "Saint-Jean le Sec", id_1: "1203", id_2: "1264", lat: "43.5705875344994", lng: "3.83757873266956" },
+					{ label: "Saint-Lazare", id_1: "1224", id_2: "1243", lat: "43.6266187470306", lng: "3.88859098242226" },
+					{ label: "Via Domitia", id_1: "1236", id_2: "1231", lat: "43.6465335797711", lng: "3.929899968006" },
+					{ label: "Victoire 2", id_1: "1262", id_2: "1205", lat: "43.5748077082151", lng: "3.84953458574525" },
+					{ label: "Villeneuve d'Angoulême", id_1: "1208", id_2: "1259", lat: "43.5887380443422", lng: "3.86574602237706" } ]);
 			}
 			
 			return _data;
 		}
-		
-		public static var directionsArray:Array = [ {value: "Jacou", label: "Jacou"} 
-												   ,{value: "Sablassou", label: "Notre-Dame de Sablassou"} 
-												   ,{value: "Sabines", label: "Sabines"} 
-												   ,{value: "St-jean De Vedas", label: "Saint-Jean de Védas Centre"} ];
 	}
 }
 

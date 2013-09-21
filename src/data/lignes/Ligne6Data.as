@@ -26,72 +26,59 @@ package data.lignes
 		//
 		////////////////////////////////
 		
-		private static var _ligneData:Object;
-		
-		public static function get ligneData():Object
-		{
-			if (!_ligneData)
-				_ligneData = {value: "6", label: "Ligne 6", icon: EmbeddedAssets.LIGNE_6_ICON};
-			
-			return _ligneData;
-		}
-		
 		private static var _data:ListCollection;
 		
 		public static function get data():ListCollection
 		{
 			if (!_data)
 			{
-				_data = new ListCollection([{value: "Alco", lat: "43.6258509402572", lon: "3.83985411125395", label: "Alco" }
-					, {value: "Ambroise Pare", lat: "43.6381268226019", lon: "3.84789501692879", label: "Ambroise Paré" }
-					, {value: "Anatole France", lat: "43.60548721122", lon: "3.87644991098142", label: "Anatole France" }
-					, {value: "Antennes", lat: "43.6447206403263", lon: "3.84210264961506", label: "Antennes" }
-					, {value: "Apothicaires", lat: "43.6414785930971", lon: "3.83473845141172", label: "Apothicaires" }
-					, {value: "Appel Du 18 Juin", lat: "43.6362727429097", lon: "3.83056676504965", label: "Appel du 18 Juin" }
-					, {value: "Arceaux", lat: "43.6099276928617", lon: "3.86219950837959", label: "Les Arceaux" }
-					, {value: "Av. De Toulouse", lat: "43.5915771925959", lon: "3.85793116558353", label: "Avenue de Toulouse" }
-					, {value: "Berthelot", lat: "43.6019363750556", lon: "3.8694825084272", label: "Berthelot" }
-					, {value: "Cevennes", lat: "43.6220672259635", lon: "3.84624498544891", label: "Cévennes" }
-					, {value: "Chateau D'o", lat: "43.6314850756983", lon: "3.84287255949927", label: "Château d'Ô" }
-					, {value: "Coll. C. Claudel", lat: "43.6164285091452", lon: "3.86210711080997", label: "Collège Camille Claudel" }
-					, {value: "Doria", lat: "43.612511836206", lon: "3.8679537173011", label: "Doria" }
-					, {value: "Estanove", lat: "43.5978036311888", lon: "3.84822621421824", label: "Estanove" }
-					, {value: "Euromedecine", lat: "43.6390920095547", lon: "3.82808319142705", label: "Euromédecine" }
-					, {value: "Font Couverte", lat: "43.593503963304", lon: "3.85163128106791", label: "Font Couverte" }
-					, {value: "G. Janvier", lat: "43.5973640777133", lon: "3.8641585597822", label: "Guillaume Janvier" }
-					, {value: "Gare Saint-roch", lat: "43.6051626028276", lon: "3.87967353379184", label: "Gare Saint-Roch" }
-					, {value: "Georges Brassens", lat: "43.5958055516172", lon: "3.86248419133896", label: "Georges Brassens" }
-					, {value: "Jean Bart", lat: "43.6251204895797", lon: "3.83742790570092", label: "Jean Bart" }
-					, {value: "La Gaillarde", lat: "43.6162329368977", lon: "3.85843937421461", label: "La Gaillarde" }
-					, {value: "Las Rebes", lat: "43.6207800393193", lon: "3.84926122909585", label: "Las Rébès" }
-					, {value: "Le Grand M", lat: "43.5910003521571", lon: "3.85473313987319", label: "Le Grand M" }
-					, {value: "Louis Ravas", lat: "43.6198176735933", lon: "3.851865240344", label: "Louis Ravaz" }
-					, {value: "Lycee Clemenceau", lat: "43.6030927432043", lon: "3.87161652630821", label: "Lycée Georges Clemenceau" }
-					, {value: "Observatoire", lat: "43.6064049501532", lon: "3.87670970189679", label: "Observatoire" }
-					, {value: "Occitanie", lat: "43.6345370485572", lon: "3.84848571021074", label: "Occitanie" }
-					, {value: "Pas Du Loup", lat: "43.600373423026", lon: "3.84863437674063", label: "Pas du Loup" }
-					, {value: "Peyrou", lat: "43.6112145997352", lon: "3.87195231161577", label: "Peyrou" }
-					, {value: "Pierre Viala", lat: "43.616825691947", lon: "3.8549596610351", label: "Pierre Viala" }
-					, {value: "Pitot", lat: "43.6121000801743", lon: "3.87036768662885", label: "Pitot" }
-					, {value: "Place Du 8 Mai", lat: "43.5997810375499", lon: "3.86678991265418", label: "Place du 8 Mai" }
-					, {value: "Puech Villa", lat: "43.6402505273", lon: "3.82992813926925", label: "Puech Villa" }
-					, {value: "Ronceray", lat: "43.5936228835974", lon: "3.86012537262586", label: "Ronceray" }
-					, {value: "Rondelet", lat: "43.6034872110247", lon: "3.87548882128635", label: "Rondelet" }
-					, {value: "Rte De Ganges", lat: "43.6429289232461", lon: "3.84520588372826", label: "Route de Ganges" }
-					, {value: "Saint Denis", lat: "43.6056360717793", lon: "3.87388382293218", label: "Saint-Denis" }
-					, {value: "Saint Guilhem", lat: "43.6087919866427", lon: "3.87289550019621", label: "Saint-Guilhem" }
-					, {value: "Saint Priest", lat: "43.6344993026344", lon: "3.84371451190719", label: "Saint-Priest" }
-					, {value: "Sainte Genevieve", lat: "43.6231363732993", lon: "3.84435515042488", label: "Sainte-Geneviève" }
-					, {value: "Sainte Therese", lat: "43.6141977149679", lon: "3.86538822419031", label: "Sainte-Thérèse" }
-					, {value: "Val D'aurelle", lat: "43.642769808039", lon: "3.83627638489363", label: "Val d'Aurelle" }
-					, {value: "Vega", lat: "43.5956487574372", lon: "3.84964728629091", label: "Véga" } ]);
+				_data = new ListCollection([ { label: "Alco", id_1: "90", id_2: "83", lat: "43.6258279063947", lng: "3.83952559337348" },
+					{ label: "Ambroise Paré", id_1: "46", lat: "43.6380121390239", lng: "3.84769396815333" },
+					{ label: "Anatole France", id_1: "44", lat: "43.6055685075168", lng: "3.8763779114993" },
+					{ label: "Antennes", id_1: "57", id_2: "48", lat: "43.6446775150869", lng: "3.84225010122023" },
+					{ label: "Apothicaires", id_1: "87", id_2: "117", lat: "43.6416055356031", lng: "3.83493987782508" },
+					{ label: "Appel du 18 Juin", id_1: "556", lat: "43.6365468360809", lng: "3.83020264138175" },
+					{ label: "Avenue de Toulouse", id_1: "237", id_2: "216", lat: "43.5918215839685", lng: "3.85808612377915" },
+					{ label: "Berthelot", id_1: "199", id_2: "174", lat: "43.6021286154052", lng: "3.86982788605477" },
+					{ label: "Cévennes", id_1: "92", id_2: "81", lat: "43.6220220100698", lng: "3.84621907657979" },
+					{ label: "Château d'Ô", id_1: "247", id_2: "89", lat: "43.6319278012724", lng: "3.84240900812595" },
+					{ label: "Collège Camille Claudel", id_1: "254", id_2: "295", lat: "43.616396600225", lng: "3.86209392082106" },
+					{ label: "Doria", id_1: "293", lat: "43.612493581044", lng: "3.86792851848614" },
+					{ label: "Estanove", id_1: "212", id_2: "241", lat: "43.5977309307216", lng: "3.84823669591361" },
+					{ label: "Euromédecine", id_1: "54", lat: "43.6388125036604", lng: "3.82757584744842" },
+					{ label: "Font Couverte", id_1: "239", id_2: "214", lat: "43.5935849781639", lng: "3.85157780704473" },
+					{ label: "Gare Saint-Roch", id_1: "1", lat: "43.6049706716887", lng: "3.87921949262933" },
+					{ label: "Georges Brassens", id_1: "244", id_2: "227", lat: "43.5958769762589", lng: "3.86247376554408" },
+					{ label: "Guillaume Janvier", id_1: "218", id_2: "235", lat: "43.5976454091688", lng: "3.864561933285" },
+					{ label: "Jean Bart", id_1: "273", lat: "43.6255835516352", lng: "3.83769999140521" },
+					{ label: "La Gaillarde", id_1: "88", id_2: "116", lat: "43.6162513784556", lng: "3.857722246641" },
+					{ label: "Las Rébès", id_1: "80", id_2: "93", lat: "43.6208021348586", lng: "3.84924328826401" },
+					{ label: "Le Grand M", id_1: "215", id_2: "238", lat: "43.5909717821731", lng: "3.85458812505853" },
+					{ label: "Louis Ravaz", id_1: "85", id_2: "114", lat: "43.6197106026762", lng: "3.85144171506991" },
+					{ label: "Lycée Georges Clemenceau", id_1: "175", id_2: "198", lat: "43.6030474392888", lng: "3.87159678912742" },
+					{ label: "Observatoire", id_1: "3", id_2: "51", lat: "43.6062629168428", lng: "3.87685436385639" },
+					{ label: "Occitanie", id_1: "113", id_2: "86", lat: "43.6346135344989", lng: "3.84837142414812" },
+					{ label: "Paladilhe", id_1: "256", lat: "43.612045606876", lng: "3.86718653369226" },
+					{ label: "Pas du Loup", id_1: "242", id_2: "211", lat: "43.6004461447968", lng: "3.84885280875692" },
+					{ label: "Peyrou", id_1: "5", id_2: "52", lat: "43.6107658835538", lng: "3.87185368107145" },
+					{ label: "Pierre Viala", id_1: "115", id_2: "84", lat: "43.6165864898749", lng: "3.85498427142864" },
+					{ label: "Pitot", id_1: "292", lat: "43.612090811667", lng: "3.87034272852489" },
+					{ label: "Place du 8 Mai", id_1: "228", id_2: "245", lat: "43.5999475517205", lng: "3.86704798913779" },
+					{ label: "Puech Villa", id_1: "50", id_2: "55", lat: "43.6400820065708", lng: "3.82939149156508" },
+					{ label: "Ronceray", id_1: "217", id_2: "236", lat: "43.5937857012004", lng: "3.86032764487268" },
+					{ label: "Rondelet", id_1: "197", lat: "43.6040889251336", lng: "3.87485354148993" },
+					{ label: "Route de Ganges", id_1: "47", id_2: "58", lat: "43.6429532782356", lng: "3.84534892210135" },
+					{ label: "Saint-Denis", id_1: "6", lat: "43.6050373963146", lng: "3.87453269224891" },
+					{ label: "Saint-Guilhem", id_1: "59", id_2: "53", lat: "43.6087014026398", lng: "3.87289928579799" },
+					{ label: "Saint-Priest", id_1: "246", id_2: "303", lat: "43.6351553782076", lng: "3.84368235202323" },
+					{ label: "Sainte-Geneviève", id_1: "82", id_2: "91", lat: "43.6232363179595", lng: "3.84423407619641" },
+					{ label: "Sainte-Thérèse", id_1: "294", id_2: "255", lat: "43.6141006302092", lng: "3.86553413665737" },
+					{ label: "Val d'Aurelle", id_1: "56", id_2: "49", lat: "43.6428168126498", lng: "3.83640763454239" },
+					{ label: "Véga", id_1: "213", id_2: "240", lat: "43.5957074797539", lng: "3.84958084817903" } ]);
 			}
 			
 			return _data;
 		}
-		
-		public static var directionsArray:Array = [ {value: "Pas Du Loup", label: "Pas Du Loup"}
-			,{value: "Euromedecine", label: "Euromédecine"} ];
 		
 	}
 }
