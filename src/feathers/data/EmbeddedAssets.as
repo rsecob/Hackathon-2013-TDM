@@ -131,6 +131,23 @@ package feathers.data
 		public static var LIGNE_16_ICON:Texture;
 		public static var LIGNE_19_ICON:Texture;
 		
+		///////////////////////////
+		// ITINERARY VIEW ICONS
+		///////////////////////////
+		
+		// Embed
+		
+		[Embed(source="/../assets/icons/location.png")]
+		private static const LOCATION_ICON:Class;
+		
+		[Embed(source="/../assets/icons/walk.png")]
+		private static const WALK_ICON:Class;
+		
+		// Texture
+		
+		public static var ITINERARY_LOCATION_ICON:Texture;
+		public static var WALK_LOCATION_ICON:Texture;
+		
 		public static function initialize():void
 		{
 			// Home View
@@ -166,6 +183,11 @@ package feathers.data
 			LIGNE_15_ICON = Texture.fromBitmap(new DATA_15_ICON());
 			LIGNE_16_ICON = Texture.fromBitmap(new DATA_16_ICON());
 			LIGNE_19_ICON = Texture.fromBitmap(new DATA_19_ICON());
+			
+			// Itinerary View
+			
+			ITINERARY_LOCATION_ICON = Texture.fromBitmap(new LOCATION_ICON());
+			WALK_LOCATION_ICON = Texture.fromBitmap(new WALK_ICON());
 		}
 	}
 }

@@ -32,6 +32,8 @@ package data.lignes
 		{
 			if (!_ligneData)
 				_ligneData = {value: "7", label: "Ligne 7", icon: EmbeddedAssets.LIGNE_7_ICON };
+			
+			return _ligneData;
 		}
 		
 		private static var _data:ListCollection;

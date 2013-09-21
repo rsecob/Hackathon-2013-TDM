@@ -140,7 +140,7 @@ package feathers.controls
 		 * @see feathers.core.IFeathersControl#nameList
 		 */
 		public static const ALTERNATE_NAME_INSET_GROUPED_LIST:String = "feathers-inset-grouped-list";
-		public static const GROUPEDLIST_LIST_MODE:String = "groupedlist-list-mode";
+		public static const ITINERARY_NAME_INSET_GROUPED_LIST:String = "itinerary-inset-grouped-list";
 
 		/**
 		 * The default name to use with header renderers.
@@ -162,6 +162,7 @@ package feathers.controls
 		 * @see feathers.core.IFeathersControl#nameList
 		 */
 		public static const ALTERNATE_CHILD_NAME_INSET_HEADER_RENDERER:String = "feathers-grouped-list-inset-header-renderer";
+		public static const ITINERARY_CHILD_NAME_INSET_HEADER_RENDERER:String = "itinerary-grouped-list-inset-header-renderer";
 
 		/**
 		 * The default name to use with footer renderers.
@@ -195,6 +196,7 @@ package feathers.controls
 		 * @see feathers.core.IFeathersControl#nameList
 		 */
 		public static const ALTERNATE_CHILD_NAME_INSET_ITEM_RENDERER:String = "feathers-grouped-list-inset-item-renderer";
+		public static const ITINERARY_CHILD_NAME_INSET_ITEM_RENDERER:String = "itinerary-grouped-list-inset-item-renderer";
 
 		/**
 		 * An alternate name to use for item renderers to give them an inset
@@ -210,6 +212,7 @@ package feathers.controls
 		 * @see feathers.core.IFeathersControl#nameList
 		 */
 		public static const ALTERNATE_CHILD_NAME_INSET_FIRST_ITEM_RENDERER:String = "feathers-grouped-list-inset-first-item-renderer";
+		public static const ITINERARY_CHILD_NAME_INSET_FIRST_ITEM_RENDERER:String = "itinerary-grouped-list-inset-first-item-renderer";
 
 		/**
 		 * An alternate name to use for item renderers to give them an inset
@@ -225,6 +228,7 @@ package feathers.controls
 		 * @see feathers.core.IFeathersControl#nameList
 		 */
 		public static const ALTERNATE_CHILD_NAME_INSET_LAST_ITEM_RENDERER:String = "feathers-grouped-list-inset-last-item-renderer";
+		public static const ITINERARY_CHILD_NAME_INSET_LAST_ITEM_RENDERER:String = "itinerary-grouped-list-inset-last-item-renderer";
 
 		/**
 		 * An alternate name to use for item renderers to give them an inset
@@ -241,6 +245,7 @@ package feathers.controls
 		 * @see feathers.core.IFeathersControl#nameList
 		 */
 		public static const ALTERNATE_CHILD_NAME_INSET_SINGLE_ITEM_RENDERER:String = "feathers-grouped-list-inset-single-item-renderer";
+		public static const ITINERARY_CHILD_NAME_INSET_SINGLE_ITEM_RENDERER:String = "itinerary-grouped-list-inset-single-item-renderer";
 
 		/**
 		 * @copy feathers.controls.Scroller#SCROLL_POLICY_AUTO

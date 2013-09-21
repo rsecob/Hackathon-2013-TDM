@@ -25,6 +25,7 @@ package view
 	import starling.events.TouchPhase;
 	
 	import view.home.HomeView;
+	import view.itinerary.ItineraryView;
 	import view.list.List;
 	import view.time.TimeView;
 	
@@ -48,7 +49,7 @@ package view
 		
 		private static const HOME_VIEW:String = "homeView";
 		private static const TIME_VIEW:String = "timeView";
-		
+		private static const ITINERARY_VIEW:String = "itineraryView";
 		
 		private var _list:List;
 		private var listTween:Tween;
@@ -87,6 +88,11 @@ package view
 					backHome: HOME_VIEW
 				}));
 			
+			this._navigator.addScreen(ITINERARY_VIEW, new ScreenNavigatorItem(ItineraryView,
+				{
+					backHome: HOME_VIEW
+				}));
+			
 			if(DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
 			}
@@ -94,7 +100,8 @@ package view
 			{
 				this._navigator.addScreen(HOME_VIEW, new ScreenNavigatorItem(HomeView,
 					{
-						time: TIME_VIEW
+						time: TIME_VIEW,
+						itinerary: ITINERARY_VIEW
 					}));
 				
 				this._navigator.showScreen(HOME_VIEW);
@@ -117,8 +124,8 @@ package view
 			{
 				if (isNaN(lastGlobaxX))
 				{
-					if ((moving.globalX > (lastTouch + 20))
-						|| (moving.globalX < (lastTouch - 20)))
+					if ((moving.globalX > (lastTouch + (80 * MetalWorksMobileTheme.DPI_SCALE)))
+						|| (moving.globalX < (lastTouch - (80 * MetalWorksMobileTheme.DPI_SCALE))))
 						lastGlobaxX = moving.globalX;
 				}
 				else

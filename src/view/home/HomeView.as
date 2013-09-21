@@ -86,6 +86,7 @@ package view.home
 			_itineraryButton.label = "Itinéraires";
 			_itineraryButton.gap = 10 * MetalWorksMobileTheme.DPI_SCALE;
 			_itineraryButton.addEventListener(Event.RESIZE, button_resize_handler);
+			_itineraryButton.addEventListener(Event.TRIGGERED, itineraryButton_clickHandler);
 			
 			var markerIcon:ImageLoader = new ImageLoader();
 			markerIcon.source = EmbeddedAssets.HOME_MARKER_ICON;
@@ -124,6 +125,11 @@ package view.home
 		/////////////////////////////////
 		// Event Handler
 		/////////////////////////////////
+		
+		private function itineraryButton_clickHandler():void
+		{
+			dispatchEventWith("itinerary", true);
+		}
 		
 		private function timeButton_clickHandler():void
 		{
