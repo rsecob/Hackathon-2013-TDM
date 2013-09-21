@@ -14,12 +14,14 @@ package view.game
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
+	import starling.utils.deg2rad;
+	import starling.utils.rad2deg;
 	
 	public class GamePlaying extends Sprite
 	{
 		private var game:Game;
-		private var speed:Number = 0;
-		private var angle:Number = 0;
+		public var speed:Number = 0;
+		public var angle:Number = 0;
 		private var rotation_speed:Number = 0;
 		
 		[Embed(source="../../../assets/images/game/cloud.png")]
@@ -27,7 +29,7 @@ package view.game
 		protected var cloudTexture:Texture;
 		protected var cloudImage:Image;
 		
-		[Embed(source="../../../assets/images/game/meme.gif")]
+		[Embed(source="../../../assets/images/game/meme.png")]
 		public static const MemeTexture:Class;
 		protected var memeTexture:Texture;
 		protected var memeImage:Image;
@@ -57,12 +59,25 @@ package view.game
 		protected var railsTexture:Texture;
 		protected var railsImage:Image;
 		
+		[Embed(source="../../../assets/images/game/bonus.jpg")]
+		public static const BonusTexture:Class;
+		protected var bonusTexture:Texture;
+		
+		[Embed(source="../../../assets/images/game/malus1.png")]
+		public static const Malus1Texture:Class;
+		protected var malus1Texture:Texture;
+		
+		[Embed(source="../../../assets/images/game/malus2.png")]
+		public static const Malus2Texture:Class;
+		protected var malus2Texture:Texture;
+		
 		private var real_begin:Touch = null;
 		private var begin_time:Number = 0;
 		private var baseTramwayPositionX:Number = 0;
 		
 		private var tramArrived:Boolean = false;
 		private var memeFlying:Boolean = false;
+		private var bonuses:Vector.<BonusGame>;
 
 		public function GamePlaying(game:Game)
 		{
@@ -70,6 +85,8 @@ package view.game
 			this.game = game;
 
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			
+			bonuses = new Vector.<BonusGame>();
 		}
 
 		protected function onAddedToStage(e:Event):void
@@ -77,6 +94,8 @@ package view.game
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			this.loadTextures();
 			this.login();
+			this.generateNewBonus();
+			this.generateNewBonus();
 			game.addEventListener(Event.ENTER_FRAME, newFrame);
 		}
 		
@@ -107,6 +126,8 @@ package view.game
 			var x_mov:Number = this.speed * Math.cos(this.angle);
 			var y_mov:Number = this.speed * Math.sin(this.angle);
 
+			this.memeImage.rotation = deg2rad((rad2deg(this.memeImage.rotation)  + this.speed / 4) % 360);
+			
 			this.cloudImage.x -= x_mov / 20;
 			this.cloudImage.y += y_mov / 20;
 			if (this.cloudImage.x <= - this.cloudImage.width / 2)
@@ -140,12 +161,24 @@ package view.game
 			this.groundImage.y += y_mov;
 			if (this.groundImage.x <= - this.groundImage.width / 2)
 				this.groundImage.x = 0;
+			
+			this.moveBonuses(x_mov, y_mov);
 			this.angle -= Math.PI / 300;
 			if (this.angle < - Math.PI / 2)
 				this.angle = - Math.PI / 2;
 			this.speed -= Math.sin(this.angle) / 10;
-			if (this.speed < 1)
-				this.speed = 0;
+		}
+		
+		protected function moveBonuses(x_mov:Number, y_mov:Number):void
+		{			
+			for each(var bonus:BonusGame in bonuses)
+			{
+				if (bonus)
+				{
+					bonus.y += y_mov;
+					bonus.x -= x_mov;
+				}
+			}
 		}
 		
 		public function loadTextures():void
@@ -159,6 +192,9 @@ package view.game
 				this.groundTexture = Texture.fromBitmap(new GroundTexture());
 				this.housesTexture = Texture.fromBitmap(new HousesTexture());
 				this.treesTexture = Texture.fromBitmap(new TreesTexture());
+				this.bonusTexture = Texture.fromBitmap(new BonusTexture());
+				this.malus1Texture = Texture.fromBitmap(new Malus1Texture());
+				this.malus2Texture = Texture.fromBitmap(new Malus2Texture());
 			}
 		}
 
@@ -222,10 +258,12 @@ package view.game
 			treesImage.setTexCoords(3, new Point(coeff, 1));
 			
 			memeImage = new Image(this.memeTexture);
-			memeImage.height = 50;
+			memeImage.pivotX = memeImage.width  / 2.0;
+			memeImage.pivotY = memeImage.height / 2.0;
+			memeImage.height = 63;
 			memeImage.width = 50;
-			memeImage.y = stage.stageWidth - memeImage.height * 2 - 5;
-			memeImage.x = stage.stageHeight / 2 + 120;
+			memeImage.y = stage.stageWidth - 90;
+			memeImage.x = stage.stageHeight / 2 + 145;
 
 			tramwayImage = new Image(this.tramwayTexture);
 			tramwayImage.width = 511;
@@ -236,7 +274,6 @@ package view.game
 			railsImage = new Image(this.railsTexture);
 			railsImage.y = stage.stageWidth - 66;
 			railsImage.x = - railsImage.width + stage.stageHeight / 2 + 100;
-//			railsImage.width = tramwayImage.width + 100;
 
 			addChild(groundImage);
 			addChild(cloudImage);
@@ -253,6 +290,32 @@ package view.game
 			{
 				this.angle = Math.abs(this.angle);
 				this.speed /= 2;
+				if (this.speed < 0.2)
+					this.speed = 0;
+			}
+			
+			var len:uint = this.bonuses.length;
+			var bonus:BonusGame = null;
+			while (len > 0)
+			{
+				bonus = bonuses.shift();
+				if (bonus)
+				{
+					if (bonus.x < - bonus.width)
+					{
+						this.removeChild(bonus);
+						this.generateNewBonus();
+					}
+					else
+					{
+						if (bonus.isColliding(memeImage))
+						{
+							bonus.apply(this);
+						}
+						bonuses.push(bonus);
+					}
+				}
+				len--;
 			}
 		}
 		
@@ -304,6 +367,42 @@ package view.game
 			if (this.angle > Math.PI / 2)
 				this.angle = this.angle - Math.PI;
 			this.angle = Math.PI / 4; // REMOVE THIS LINE!
+		}
+		
+		protected function generateNewBonus() : void
+		{
+			var last:BonusGame = this.bonuses.pop();
+			var last_x:Number = Math.max(stage.stageHeight, stage.stageWidth);
+			var type:Boolean = false;
+			
+			if (last)
+				last_x = last.x;
+			if (Math.random() <= 0.5)
+				type = true;
+			var newBonus:BonusGame = new BonusGame(type, last_x + Math.max(stage.stageHeight, stage.stageWidth) / 2 + Math.random() * 20);
+			var img:Image;
+			if (type == BonusGame.BONUS)
+			{
+				img = new Image(bonusTexture);
+				img.height = 30;
+				img.width = 50;
+				img.y = groundImage.y + groundImage.height - 82;
+			}
+			else
+			{
+				if (Math.random() < 0.5)
+					img = new Image(malus1Texture);
+				else
+					img = new Image(malus2Texture);
+				img.width = 50;
+				img.height = 116;
+				img.y = groundImage.y + groundImage.height - img.height;
+			}
+			newBonus.addChild(img);
+			
+			this.bonuses.push(last);
+			this.bonuses.push(newBonus);
+			this.addChild(newBonus);
 		}
 	}
 }
