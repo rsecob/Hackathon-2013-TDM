@@ -7,11 +7,10 @@ package view.game
 		public var place_to:String = "";
 		public var place_from:String = "";
 		public var line:int = 1;
-		public var stops:Vector.<String> = null;
+		public var name:String = "";
 		
 		public function GameScenario()
 		{
-			this.stops = new Vector.<String>();
 		}
 	}
 }

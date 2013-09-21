@@ -195,6 +195,7 @@ package view.game
 				this.bonusTexture = Texture.fromBitmap(new BonusTexture());
 				this.malus1Texture = Texture.fromBitmap(new Malus1Texture());
 				this.malus2Texture = Texture.fromBitmap(new Malus2Texture());
+				BonusGame.imgTexture = Texture.fromBitmap(new BonusGame.ImgTexture());
 			}
 		}
 
@@ -279,7 +280,7 @@ package view.game
 			addChild(cloudImage);
 			addChild(housesImage);
 			addChild(treesImage);
-			addChild(memeImage);
+			stage.addChild(memeImage);
 			addChild(railsImage);
 			addChild(tramwayImage);
 		}
@@ -336,7 +337,7 @@ package view.game
 				real_begin = begin.clone();
 				begin_time = (new Date()).time;
 			}
-						
+
 			if (moved && real_begin)
 			{
 				tramwayImage.x = this.baseTramwayPositionX + moved.globalX - real_begin.globalX;
@@ -394,11 +395,11 @@ package view.game
 					img = new Image(malus1Texture);
 				else
 					img = new Image(malus2Texture);
-				img.width = 50;
-				img.height = 116;
-				img.y = groundImage.y + groundImage.height - img.height;
+				img.width = 50 / 1.5;
+				img.height = 116 / 1.5;
+				img.y = groundImage.y + groundImage.height - img.height * 1.5;
 			}
-			newBonus.addChild(img);
+			newBonus.img = img;
 			
 			this.bonuses.push(last);
 			this.bonuses.push(newBonus);

@@ -5,6 +5,7 @@ package view.game
 	
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.textures.Texture;
 	
 	public class BonusGame extends Sprite
 	{
@@ -14,6 +15,21 @@ package view.game
 		protected var angle:Number = 0;
 		protected var speed:Number = 0;
 		protected var applied:Boolean = false;
+		
+		[Embed(source="../../../assets/images/game/stop.png")]
+		public static const ImgTexture:Class;
+		public static var imgTexture:Texture;
+		protected var imgImage:Image = null;
+		
+		protected var _img:Image;
+		
+		public function set img(i:Image):void
+		{
+			this._img = i;
+			this.addChild(i);
+			if (this.imgImage)
+				this.imgImage.y = i.y;
+		}
 		
 		public function BonusGame(type:Boolean, x:Number)
 		{
@@ -28,6 +44,15 @@ package view.game
 			if (type == MALUS)
 				this.angle -= Math.PI / 2;
 			this.x = x;
+			if (type == MALUS)
+			{
+				this.imgImage = new Image(imgTexture);
+				this.imgImage.width /= 2;
+				this.imgImage.height /= 2;
+				this.imgImage.x = - this.imgImage.width / 2;
+				
+				this.addChild(this.imgImage);
+			}
 		}
 		
 		public function refresh(speed:Number):void
@@ -51,7 +76,7 @@ package view.game
 		public function isColliding(sp:Image):Boolean
 		{
 			var bounds1:Rectangle = sp.bounds;
-			var bounds2:Rectangle = this.bounds;
+			var bounds2:Rectangle = _img.bounds;
 			
 			if (bounds1.intersects(bounds2))
 				return true;
