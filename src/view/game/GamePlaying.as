@@ -52,6 +52,11 @@ package view.game
 		protected var treesTexture:Texture;
 		protected var treesImage:Image;
 		
+		[Embed(source="../../../assets/images/game/rails.png")]
+		public static const RailsTexture:Class;
+		protected var railsTexture:Texture;
+		protected var railsImage:Image;
+		
 		private var real_begin:Touch = null;
 		private var begin_time:Number = 0;
 		private var baseTramwayPositionX:Number = 0;
@@ -119,10 +124,14 @@ package view.game
 			
 			if (this.tramwayImage != null)
 			{
+				this.railsImage.x -= x_mov;
+				this.railsImage.y += y_mov;
 				this.tramwayImage.x -= x_mov;
 				this.tramwayImage.y += y_mov;
 				if (this.tramwayImage.x <= - this.tramwayImage.width)
 				{
+					removeChild(railsImage);
+					railsImage = null;
 					removeChild(tramwayImage);
 					tramwayImage = null;
 				}
@@ -131,10 +140,12 @@ package view.game
 			this.groundImage.y += y_mov;
 			if (this.groundImage.x <= - this.groundImage.width / 2)
 				this.groundImage.x = 0;
-			this.angle -= Math.PI / 500;
+			this.angle -= Math.PI / 300;
 			if (this.angle < - Math.PI / 2)
 				this.angle = - Math.PI / 2;
 			this.speed -= Math.sin(this.angle) / 10;
+			if (this.speed < 1)
+				this.speed = 0;
 		}
 		
 		public function loadTextures():void
@@ -144,6 +155,7 @@ package view.game
 				this.cloudTexture = Texture.fromBitmap(new CloudTexture());
 				this.memeTexture = Texture.fromBitmap(new MemeTexture());
 				this.tramwayTexture = Texture.fromBitmap(new TramwayTexture());
+				this.railsTexture = Texture.fromBitmap(new RailsTexture());
 				this.groundTexture = Texture.fromBitmap(new GroundTexture());
 				this.housesTexture = Texture.fromBitmap(new HousesTexture());
 				this.treesTexture = Texture.fromBitmap(new TreesTexture());
@@ -213,19 +225,25 @@ package view.game
 			memeImage.height = 50;
 			memeImage.width = 50;
 			memeImage.y = stage.stageWidth - memeImage.height * 2 - 5;
-			memeImage.x = stage.stageHeight - memeImage.width;
+			memeImage.x = stage.stageHeight / 2 + 120;
 
 			tramwayImage = new Image(this.tramwayTexture);
 			tramwayImage.width = 511;
-			tramwayImage.height = 62.5;
-			tramwayImage.y = stage.stageWidth - this.tramwayImage.height * 2;
+			tramwayImage.height = 87;
+			tramwayImage.y = stage.stageWidth - 115;
 			tramwayImage.x = this.baseTramwayPositionX = - tramwayImage.width;
+			
+			railsImage = new Image(this.railsTexture);
+			railsImage.y = stage.stageWidth - 66;
+			railsImage.x = - railsImage.width + stage.stageHeight / 2 + 100;
+//			railsImage.width = tramwayImage.width + 100;
 
 			addChild(groundImage);
 			addChild(cloudImage);
 			addChild(housesImage);
 			addChild(treesImage);
 			addChild(memeImage);
+			addChild(railsImage);
 			addChild(tramwayImage);
 		}
 		
@@ -267,12 +285,12 @@ package view.game
 					end = moved;
 				else
 					this.baseTramwayPositionX = this.tramwayImage.x;
-				if (end.globalX >= this.memeImage.x)
+				if (tramwayImage.x + tramwayImage.width >= this.memeImage.x)
 				{
 					var dist:Number = end.globalX - real_begin.globalX;
 					var time:Number = (new Date()).time - begin_time;
 				
-					this.speed = dist / time * 10;
+					this.speed = dist / time * 50;
 					this.pushMeme();
 				}
 			}
