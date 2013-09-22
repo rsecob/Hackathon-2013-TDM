@@ -98,6 +98,7 @@ package feathers.controls
 		 * @see feathers.core.IFeathersControl#nameList
 		 */
 		public static const ALTERNATE_NAME_CALL_TO_ACTION_BUTTON:String = "feathers-call-to-action-button";
+		public static const ALTERNATE_NAME_TRANPARENT_TO_ACTION_BUTTON:String = "feathers-transparent-to-action-button";
 
 		/**
 		 * An alternate name to use with Button to allow a theme to give it
@@ -145,6 +146,7 @@ package feathers.controls
 		 */
 		public static const ALTERNATE_NAME_DANGER_BUTTON:String = "feathers-danger-button";
 		public static const ALTERNATE_NAME_CLOSE_BUTTON:String = "feathers-close-button";
+		public static const ALTERNATE_NAME_BIKE_BUTTON:String = "feathers-bike-button";
 
 		/**
 		 * An alternate name to use with Button to allow a theme to give it

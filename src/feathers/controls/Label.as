@@ -27,6 +27,8 @@ package feathers.controls
 		 * @private
 		 */
 		private static const HELPER_POINT:Point = new Point();
+		public static const WHITE:String = "white";
+		public static const BIG_WHITE:String = "big-white";
 
 		/**
 		 * Constructor.

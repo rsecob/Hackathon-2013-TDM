@@ -30,6 +30,7 @@ package view
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	
+	import view.bike.BikeView;
 	import view.home.HomeView;
 	import view.itinerary.ItineraryView;
 	import view.list.List;
@@ -47,15 +48,17 @@ package view
 			
 			addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
 			addEventListener(TouchEvent.TOUCH, touchEvent_handler);
+			initSignals();
 		}
 		
 		///////////////////////////
 		// Properties
 		///////////////////////////
 		
-		private static const HOME_VIEW:String = "homeView";
-		private static const TIME_VIEW:String = "timeView";
-		private static const ITINERARY_VIEW:String = "itineraryView";
+		public static const HOME_VIEW:String = "homeView";
+		public static const TIME_VIEW:String = "timeView";
+		public static const ITINERARY_VIEW:String = "itineraryView";
+		public static const BIKE_VIEW:String = "bikeView";
 		
 		private var _list:List;
 		private var listTween:Tween;
@@ -67,6 +70,10 @@ package view
 		private var lastTouch:Number;
 		private var lastGlobalX:Number;
 		
+		// Navigation Signal
+		
+		private var _navigationSignal:Signal;
+		
 		// List Signal
 		
 		private var _listOpenSignal:Signal;
@@ -74,6 +81,15 @@ package view
 		///////////////////////////
 		// Methods
 		///////////////////////////
+		
+		private function initSignals():void
+		{
+			_listOpenSignal = HomeSignal.listButtonSignal;
+			_listOpenSignal.add(listButton_handler);
+
+			_navigationSignal = HomeSignal.navigationSignal;
+			_navigationSignal.add(navigationSignal_handler);
+		}
 		
 		private function initView():void
 		{
@@ -86,9 +102,6 @@ package view
 			
 			this._list = new List();
 			this.listTween = new Tween(this._list, 2, Transitions.EASE_IN);
-			
-			_listOpenSignal = HomeSignal.listButtonSignal;
-			_listOpenSignal.add(listButton_handler);
 			
 			this._navigator = new ScreenNavigator();
 			_navigator.clipContent = true;
@@ -106,6 +119,11 @@ package view
 					backHome: HOME_VIEW
 				}));
 			
+			this._navigator.addScreen(BIKE_VIEW, new ScreenNavigatorItem(BikeView,
+				{
+					backHome: HOME_VIEW
+				}));
+			
 			if(DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
 			}
@@ -114,7 +132,8 @@ package view
 				this._navigator.addScreen(HOME_VIEW, new ScreenNavigatorItem(HomeView,
 					{
 						time: TIME_VIEW,
-						itinerary: ITINERARY_VIEW
+						itinerary: ITINERARY_VIEW,
+						bike: BIKE_VIEW
 					}));
 				
 				this._navigator.showScreen(HOME_VIEW);
@@ -176,6 +195,11 @@ package view
 		///////////////////////////
 		// Event Handler
 		///////////////////////////
+		
+		private function navigationSignal_handler(view:String):void
+		{
+			this._navigator.showScreen(view);
+		}
 		
 		private function touchEvent_handler(event:TouchEvent):void
 		{

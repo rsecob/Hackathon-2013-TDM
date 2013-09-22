@@ -74,5 +74,23 @@ package data
 			
 			return _data;
 		}
+		
+		public static function getLineInfo(value:String):Object
+		{
+			var lines:Array = LignesData.data.data as Array;
+			
+			for each (var line:Object in lines)
+			{
+				if (line.value == value)
+					return line;
+			}
+			
+			return null;
+		}
+		
+		public static function getData():Array
+		{
+			return LignesData.data.data as Array;
+		}
 	}
 }

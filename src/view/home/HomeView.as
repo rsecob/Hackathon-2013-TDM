@@ -10,19 +10,14 @@ package view.home
 	import feathers.events.FeathersEventType;
 	import feathers.layout.TiledColumnsLayout;
 	import feathers.layout.TiledRowsLayout;
-	import feathers.layout.VerticalLayout;
 	import feathers.system.DeviceCapabilities;
 	import feathers.themes.MetalWorksMobileTheme;
-	
-	import flash.utils.setTimeout;
 	
 	import signal.HomeSignal;
 	
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
-	import starling.display.Stage;
 	import starling.events.Event;
-	import starling.textures.TextureSmoothing;
 	
 	public class HomeView extends PanelScreen
 	{
@@ -60,6 +55,7 @@ package view.home
 		private var _timeButton:Button;
 		private var _itineraryButton:Button;
 		private var _markerButton:Button;
+		private var _bikeButton:Button;
 		
 		// Selected Button
 		
@@ -89,7 +85,7 @@ package view.home
 			compassIcon.snapToPixels = true;
 			compassIcon.textureScale = this.dpiScale;
 			
-			_itineraryButton = new Button();
+			_itineraryButton = new Button(); 
 			_itineraryButton.nameList.add(Button.ALTERNATE_NAME_QUIET_BUTTON);
 			_itineraryButton.iconPosition = Button.ICON_POSITION_TOP;
 			_itineraryButton.defaultIcon = compassIcon;
@@ -101,7 +97,7 @@ package view.home
 			var markerIcon:ImageLoader = new ImageLoader();
 			markerIcon.source = EmbeddedAssets.HOME_MARKER_ICON;
 			markerIcon.snapToPixels = true;
-			markerIcon.textureScale = this.dpiScale / 1.05;
+			markerIcon.textureScale = this.dpiScale;
 			
 			_markerButton = new Button();
 			_markerButton.nameList.add(Button.ALTERNATE_NAME_DANGER_BUTTON);
@@ -111,9 +107,24 @@ package view.home
 			_markerButton.label = "Géolocalisation";
 			_markerButton.addEventListener(Event.RESIZE, button_resize_handler);
 			
+			var bikeIcon:ImageLoader = new ImageLoader();
+			bikeIcon.source = EmbeddedAssets.HOME_BIKE_ICON;
+			bikeIcon.snapToPixels = true;
+			bikeIcon.textureScale = this.dpiScale;
+			
+			_bikeButton = new Button();
+			_bikeButton.nameList.add(Button.ALTERNATE_NAME_BIKE_BUTTON);
+			_bikeButton.iconPosition = Button.ICON_POSITION_TOP;
+			_bikeButton.gap = 10 * MetalWorksMobileTheme.DPI_SCALE;
+			_bikeButton.defaultIcon = bikeIcon;
+			_bikeButton.label = "Vélomagg'";
+			_bikeButton.addEventListener(Event.RESIZE, button_resize_handler);
+			_bikeButton.addEventListener(Event.TRIGGERED, bikeButton_clickHandler);
+			
 			addChild(_timeButton);
 			addChild(_itineraryButton);
 			addChild(_markerButton);
+			addChild(_bikeButton);
 			
 			if(isPhone)
 			{
@@ -164,6 +175,11 @@ package view.home
 			dispatchEventWith("time", true);
 		}
 		
+		private function bikeButton_clickHandler(event:Event):void
+		{
+			dispatchEventWith("bike", true);
+		}
+		
 		private function listButton_clickHandler():void
 		{
 			if (_listButton.isSelected)
@@ -179,16 +195,15 @@ package view.home
 			
 			_tiledLayout.horizontalAlign = TiledColumnsLayout.HORIZONTAL_ALIGN_CENTER;
 			_tiledLayout.verticalAlign = TiledColumnsLayout.VERTICAL_ALIGN_TOP;
-			_tiledLayout.paddingLeft = _tiledLayout.paddingRight = 5 * this.dpiScale;
-			_tiledLayout.paddingTop = _tiledLayout.paddingTop = 5 * this.dpiScale;
-			_tiledLayout.gap = 5 * this.dpiScale;
+			_tiledLayout.paddingLeft = _tiledLayout.paddingRight = 0;//5 * this.dpiScale;
+			_tiledLayout.paddingTop = _tiledLayout.paddingTop = 0;//5 * this.dpiScale;
+			_tiledLayout.gap = 0;//5 * this.dpiScale;
 			
 			this.layout = _tiledLayout;
 			
 			initButton();
 			initSignalHandlers();
 		}
-		
 		
 		private function button_resize_handler(event:Event):void
 		{

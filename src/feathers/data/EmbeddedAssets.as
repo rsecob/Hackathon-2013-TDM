@@ -18,12 +18,16 @@ package feathers.data
 		
 		[Embed(source="/../assets/icons/marker.png")]
 		private static const MARKER_ICON_EMBEDDED:Class;
+
+		[Embed(source="/../assets/icons/bike.png")]
+		private static const BIKE_ICON_EMBEDDED:Class;
 		
 		// Image Loader
 		
 		public static var HOME_CLOCK_ICON:Texture;
 		public static var HOME_COMPASS_ICON:Texture;
 		public static var HOME_MARKER_ICON:Texture;
+		public static var HOME_BIKE_ICON:Texture;
 		
 		///////////////////////////
 		// LIST VIEW EMBEDDED
@@ -232,6 +236,23 @@ package feathers.data
 		public static var ITINERARY_LOCATION_ICON:Texture;
 		public static var WALK_LOCATION_ICON:Texture;
 		
+		///////////////////////////
+		// TIME VIEW ICONS
+		///////////////////////////
+		
+		// Embed
+		
+		[Embed(source="/../assets/icons/favorite.png")]
+		private static const FAVORITE_EMBED:Class;
+		
+		[Embed(source="/../assets/icons/favorite_selected.png")]
+		private static const FAVORITE_SELECTED_EMBED:Class;
+		
+		// Texture
+		
+		public static var FAVORITE_ICON:Texture;
+		public static var FAVORITE_SELECTED_ICON:Texture;
+		
 		public static function initialize():void
 		{
 			// Home View
@@ -239,6 +260,7 @@ package feathers.data
 			HOME_CLOCK_ICON = Texture.fromBitmap(new CLOCK_ICON_EMBEDDED());
 			HOME_COMPASS_ICON = Texture.fromBitmap(new COMPASS_ICON_EMBEDDED());
 			HOME_MARKER_ICON = Texture.fromBitmap(new MARKER_ICON_EMBEDDED());
+			HOME_BIKE_ICON = Texture.fromBitmap(new BIKE_ICON_EMBEDDED());
 			
 			// LIST View
 			
@@ -293,6 +315,11 @@ package feathers.data
 			
 			ITINERARY_LOCATION_ICON = Texture.fromBitmap(new LOCATION_ICON());
 			WALK_LOCATION_ICON = Texture.fromBitmap(new WALK_ICON());
+			
+			// Time View
+			
+			FAVORITE_ICON = Texture.fromBitmap(new FAVORITE_EMBED());
+			FAVORITE_SELECTED_ICON = Texture.fromBitmap(new FAVORITE_SELECTED_EMBED());
 		}
 	}
 }

@@ -9,7 +9,7 @@ package feathers.controls.renderers
 {
 	import feathers.controls.List;
 	import feathers.events.FeathersEventType;
-
+	
 	import starling.events.Event;
 
 	/**
@@ -22,6 +22,8 @@ package feathers.controls.renderers
 	 */
 	public class DefaultListItemRenderer extends BaseDefaultItemRenderer implements IListItemRenderer
 	{
+		public static const SEARCH:String = "search";
+		
 		/**
 		 * Constructor.
 		 */

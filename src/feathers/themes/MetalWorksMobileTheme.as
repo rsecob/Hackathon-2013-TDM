@@ -85,6 +85,8 @@ package feathers.themes
 	import starling.events.ResizeEvent;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
+	
+	import view.bike.BikeRenderer;
 
 	public class MetalWorksMobileTheme extends DisplayListWatcher
 	{
@@ -217,6 +219,8 @@ package feathers.themes
 		protected var backgroundFocusedSkinTextures:Scale9Textures;
 		protected var buttonUpSkinTextures:Scale9Textures;
 		protected var buttonDownSkinTextures:Scale9Textures;
+		protected var buttonBikeUpSkinTextures:Scale9Textures;
+		protected var buttonBikeDownSkinTextures:Scale9Textures;
 		protected var buttonDisabledSkinTextures:Scale9Textures;
 		protected var buttonSelectedUpSkinTextures:Scale9Textures;
 		protected var buttonSelectedDisabledSkinTextures:Scale9Textures;
@@ -385,6 +389,8 @@ package feathers.themes
 
 			this.buttonUpSkinTextures = new Scale9Textures(this.atlas.getTexture("button-up-skin"), BUTTON_SCALE9_GRID);
 			this.buttonDownSkinTextures = new Scale9Textures(this.atlas.getTexture("button-down-skin"), BUTTON_SCALE9_GRID);
+			this.buttonBikeUpSkinTextures = new Scale9Textures(this.atlas.getTexture("button-bike-up-skin"), BUTTON_SCALE9_GRID);
+			this.buttonBikeDownSkinTextures = new Scale9Textures(this.atlas.getTexture("button-bike-down-skin"), BUTTON_SCALE9_GRID);
 			this.buttonDisabledSkinTextures = new Scale9Textures(this.atlas.getTexture("button-disabled-skin"), BUTTON_SCALE9_GRID);
 			this.buttonSelectedUpSkinTextures = new Scale9Textures(this.atlas.getTexture("button-selected-up-skin"), BUTTON_SELECTED_SCALE9_GRID);
 			this.buttonSelectedDisabledSkinTextures = new Scale9Textures(this.atlas.getTexture("button-selected-disabled-skin"), BUTTON_SELECTED_SCALE9_GRID);
@@ -463,13 +469,18 @@ package feathers.themes
 			this.setInitializerForClassAndSubclasses(Screen, screenInitializer);
 			this.setInitializerForClassAndSubclasses(PanelScreen, panelScreenInitializer);
 			this.setInitializerForClass(Label, labelInitializer);
+			this.setInitializerForClass(Label, labelWhiteInitializer, Label.WHITE);
+			this.setInitializerForClass(Label, labelBigWhiteInitializer, Label.BIG_WHITE);
 			this.setInitializerForClass(TextFieldTextRenderer, itemRendererAccessoryLabelInitializer, BaseDefaultItemRenderer.DEFAULT_CHILD_NAME_ACCESSORY_LABEL);
 			this.setInitializerForClass(ScrollText, scrollTextInitializer);
 			this.setInitializerForClass(Button, buttonInitializer);
+			this.setInitializerForClass(Button, buttonTransparentInitializer, Button.ALTERNATE_NAME_TRANPARENT_TO_ACTION_BUTTON);
 			this.setInitializerForClass(Button, callToActionButtonInitializer, Button.ALTERNATE_NAME_CALL_TO_ACTION_BUTTON);
 			this.setInitializerForClass(Button, quietButtonInitializer, Button.ALTERNATE_NAME_QUIET_BUTTON);
+			this.setInitializerForClass(BikeRenderer, dangerButtonInitializer);
 			this.setInitializerForClass(Button, dangerButtonInitializer, Button.ALTERNATE_NAME_DANGER_BUTTON);
 			this.setInitializerForClass(Button, closeButtonInitializer, Button.ALTERNATE_NAME_CLOSE_BUTTON);
+			this.setInitializerForClass(Button, bikeButtonInitializer, Button.ALTERNATE_NAME_BIKE_BUTTON);
 			this.setInitializerForClass(Button, backButtonInitializer, Button.ALTERNATE_NAME_BACK_BUTTON);
 			this.setInitializerForClass(Button, listButtonInitializer, Button.ALTERNATE_NAME_LIST_BUTTON);
 			this.setInitializerForClass(Button, forwardButtonInitializer, Button.ALTERNATE_NAME_FORWARD_BUTTON);
@@ -485,6 +496,7 @@ package feathers.themes
 			this.setInitializerForClass(Button, nothingInitializer, SimpleScrollBar.DEFAULT_CHILD_NAME_THUMB);
 			this.setInitializerForClass(ButtonGroup, buttonGroupInitializer);
 			this.setInitializerForClass(DefaultListItemRenderer, itemRendererInitializer);
+			this.setInitializerForClass(DefaultListItemRenderer, itemRendererSearchInitializer, DefaultListItemRenderer.SEARCH);
 			this.setInitializerForClass(DefaultListItemRenderer, pickerListItemRendererInitializer, COMPONENT_NAME_PICKER_LIST_ITEM_RENDERER);
 			this.setInitializerForClass(DefaultGroupedListItemRenderer, itemRendererInitializer);
 			this.setInitializerForClass(DefaultGroupedListItemRenderer, insetMiddleItemRendererInitializer, GroupedList.ALTERNATE_CHILD_NAME_INSET_ITEM_RENDERER);
@@ -516,6 +528,7 @@ package feathers.themes
 			this.setInitializerForClass(Header, headerWithoutBackgroundInitializer, Panel.DEFAULT_CHILD_NAME_HEADER);
 			this.setInitializerForClass(Callout, calloutInitializer);
 			this.setInitializerForClass(List, listInitializer);
+			this.setInitializerForClass(List, listSearchInitializer, PickerList.SEARCH_CHILD_NAME_LIST);
 			this.setInitializerForClass(List, pickerListListInitializer, PickerList.DEFAULT_CHILD_NAME_LIST);
 			this.setInitializerForClass(GroupedList, groupedListInitializer);
 			this.setInitializerForClass(GroupedList, insetGroupedListInitializer, GroupedList.ALTERNATE_NAME_INSET_GROUPED_LIST);
@@ -609,6 +622,18 @@ package feathers.themes
 			label.textRendererProperties.textFormat = this.smallDarkTextFormat;
 			label.textRendererProperties.embedFonts = true;
 		}
+		
+		protected function labelWhiteInitializer(label:Label):void
+		{
+			label.textRendererProperties.textFormat = this.smallLightTextFormat;
+			label.textRendererProperties.embedFonts = true;
+		}
+		
+		protected function labelBigWhiteInitializer(label:Label):void
+		{
+			label.textRendererProperties.textFormat = this.largeLightTextFormat;
+			label.textRendererProperties.embedFonts = true;
+		}
 
 		protected function itemRendererAccessoryLabelInitializer(renderer:TextFieldTextRenderer):void
 		{
@@ -661,6 +686,23 @@ package feathers.themes
 			this.baseButtonInitializer(button);
 		}
 		
+		protected function buttonTransparentInitializer(button:Button):void
+		{
+			button.paddingTop = button.paddingBottom = 3 * this.scale;
+			button.paddingLeft = button.paddingRight = 3 * this.scale;
+			//button.gap = 12 * this.scale;
+			
+			const skinSelector:SmartDisplayObjectStateValueSelector = new SmartDisplayObjectStateValueSelector();
+			skinSelector.defaultValue = null;
+			skinSelector.displayObjectProperties =
+				{
+					width: 60 * this.scale,
+						height: 60 * this.scale,
+						textureScale: this.scale
+				};
+			button.stateToSkinFunction = skinSelector.updateValue;
+		}
+		
 		protected function callToActionButtonInitializer(button:Button):void
 		{
 			const skinSelector:SmartDisplayObjectStateValueSelector = new SmartDisplayObjectStateValueSelector();
@@ -693,6 +735,29 @@ package feathers.themes
 			this.baseButtonInitializer(button);
 		}
 
+		
+		protected function bikeButtonInitializer(button:Button):void
+		{
+			const skinSelector:SmartDisplayObjectStateValueSelector = new SmartDisplayObjectStateValueSelector();
+			skinSelector.defaultValue = this.buttonBikeUpSkinTextures;
+			skinSelector.setValueForState(this.buttonBikeDownSkinTextures, Button.STATE_DOWN, false);
+			skinSelector.setValueForState(this.buttonDisabledSkinTextures, Button.STATE_DISABLED, false);
+			skinSelector.displayObjectProperties =
+				{
+					width: 60 * this.scale,
+						height: 60 * this.scale,
+						textureScale: this.scale
+				};
+			button.stateToSkinFunction = skinSelector.updateValue;
+			this.baseButtonInitializer(button);
+			
+			button.paddingTop = button.paddingBottom = 5 * this.scale;
+			button.paddingLeft = button.paddingRight = 5 * this.scale;
+			//button.gap = 12 * this.scale;
+			button.minWidth = button.minHeight = 10 * this.scale;
+			button.minTouchWidth = button.minTouchHeight = 10 * this.scale;
+		}
+		
 		protected function closeButtonInitializer(button:Button):void
 		{
 			const skinSelector:SmartDisplayObjectStateValueSelector = new SmartDisplayObjectStateValueSelector();
@@ -874,6 +939,41 @@ package feathers.themes
 			group.gap = 18 * this.scale;
 		}
 
+		protected function itemRendererSearchInitializer(renderer:BaseDefaultItemRenderer):void
+		{
+			const skinSelector:SmartDisplayObjectStateValueSelector = new SmartDisplayObjectStateValueSelector();
+			skinSelector.defaultValue = this.insetItemRendererMiddleUpSkinTextures;
+			skinSelector.defaultSelectedValue = this.insetItemRendererMiddleSelectedSkinTextures;
+			skinSelector.setValueForState(this.insetItemRendererMiddleSelectedSkinTextures, Button.STATE_DOWN, false);
+			skinSelector.displayObjectProperties =
+				{
+					width: 88 * this.scale,
+						height: 88 * this.scale,
+						textureScale: this.scale
+				};
+			renderer.stateToSkinFunction = skinSelector.updateValue;
+			
+			renderer.defaultLabelProperties.textFormat = this.largeLightTextFormat;
+			renderer.defaultLabelProperties.embedFonts = true;
+			renderer.downLabelProperties.textFormat = this.largeLightTextFormat;
+			renderer.downLabelProperties.embedFonts = true;
+			renderer.defaultSelectedLabelProperties.textFormat = this.largeLightTextFormat;
+			renderer.defaultSelectedLabelProperties.embedFonts = true;
+			
+			renderer.horizontalAlign = Button.HORIZONTAL_ALIGN_LEFT;
+			renderer.paddingTop = renderer.paddingBottom = 8 * this.scale;
+			renderer.paddingLeft = 32 * this.scale;
+			renderer.paddingRight = 24 * this.scale;
+			renderer.gap = 20 * this.scale;
+			renderer.iconPosition = Button.ICON_POSITION_LEFT;
+			renderer.accessoryGap = Number.POSITIVE_INFINITY;
+			renderer.accessoryPosition = BaseDefaultItemRenderer.ACCESSORY_POSITION_RIGHT;
+			renderer.minWidth = renderer.minHeight = 88 * this.scale;
+			renderer.minTouchWidth = renderer.minTouchHeight = 88 * this.scale;
+			
+			renderer.accessoryLoaderFactory = this.imageLoaderFactory;
+			renderer.iconLoaderFactory = this.imageLoaderFactory;		}
+		
 		protected function itemRendererInitializer(renderer:BaseDefaultItemRenderer):void
 		{
 			const skinSelector:SmartDisplayObjectStateValueSelector = new SmartDisplayObjectStateValueSelector();
@@ -1441,6 +1541,14 @@ package feathers.themes
 			panel.horizontalScrollBarFactory = this.horizontalScrollBarFactory;
 		}
 
+		protected function listSearchInitializer(list:List):void
+		{
+			list.backgroundSkin = null;
+			
+			list.verticalScrollBarFactory = this.verticalScrollBarFactory;
+			list.horizontalScrollBarFactory = this.horizontalScrollBarFactory;
+		}
+		
 		protected function listInitializer(list:List):void
 		{
 			const backgroundSkin:Quad = new Quad(100, 100, LIST_BACKGROUND_COLOR);

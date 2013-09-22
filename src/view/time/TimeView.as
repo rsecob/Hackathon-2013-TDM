@@ -4,6 +4,8 @@ package view.time
 	import com.greensock.easing.Sine;
 	
 	import core.APILoader;
+	import core.Signal;
+	import core.database.StopDatabase;
 	import core.time.TimeJSONParser;
 	
 	import data.APIData;
@@ -13,11 +15,14 @@ package view.time
 	import feathers.controls.Button;
 	import feathers.controls.Callout;
 	import feathers.controls.GroupedList;
+	import feathers.controls.Header;
+	import feathers.controls.ImageLoader;
 	import feathers.controls.Label;
 	import feathers.controls.PanelScreen;
 	import feathers.controls.PickerList;
 	import feathers.controls.ProgressBar;
 	import feathers.controls.ScrollContainer;
+	import feathers.data.EmbeddedAssets;
 	import feathers.data.HierarchicalCollection;
 	import feathers.events.FeathersEventType;
 	import feathers.layout.HorizontalLayout;
@@ -28,6 +33,9 @@ package view.time
 	import flash.net.URLRequestMethod;
 	import flash.utils.Timer;
 	import flash.utils.getDefinitionByName;
+	import flash.utils.setTimeout;
+	
+	import signal.TimeSignal;
 	
 	import starling.display.DisplayObject;
 	import starling.display.Quad;
@@ -44,6 +52,10 @@ package view.time
 			super();
 			
 			addEventListener(FeathersEventType.INITIALIZE, initialize_handler);
+			_stopDataBase = StopDatabase.getInstance();
+			
+			initSignal();
+			addEventListener(Event.REMOVED_FROM_STAGE, remove_handler);
 		}
 		
 		/////////////////////////////////
@@ -59,10 +71,50 @@ package view.time
 		private var _progessBar:ProgressBar;
 		private var _refresh:Boolean;
 		private var _timer:Timer;
+		private var _stopDataBase:StopDatabase;
+		private var _favoriteLabel:Label;
+		private var _favoriteButton:Button;
+		
+		// TimeSignal
+		
+		private var _timeSignal:Signal;
 		
 		/////////////////////////////////
 		// Methods
 		/////////////////////////////////
+		
+		private function initSignal():void
+		{
+			_timeSignal = TimeSignal.timeSignal;
+			
+			_timeSignal.add(timeSignal_handler);
+		}
+		
+		private function initFavoriteButton():void
+		{
+			var favoriteIcon:ImageLoader = new ImageLoader();
+			favoriteIcon.source = EmbeddedAssets.FAVORITE_SELECTED_ICON;
+			favoriteIcon.snapToPixels = true;
+			favoriteIcon.textureScale = this.dpiScale;
+			
+			var favoriteSelectedIcon:ImageLoader = new ImageLoader();
+			favoriteSelectedIcon.source = EmbeddedAssets.FAVORITE_ICON;
+			favoriteSelectedIcon.snapToPixels = true;
+			favoriteSelectedIcon.textureScale = this.dpiScale;
+			
+			_favoriteButton = new Button();
+			
+			_favoriteButton.nameList.add(Button.ALTERNATE_NAME_TRANPARENT_TO_ACTION_BUTTON);
+			_favoriteButton.defaultIcon = favoriteIcon;
+			_favoriteButton.defaultSelectedIcon = favoriteSelectedIcon;
+			
+			_favoriteButton.isToggle = true;
+			
+			_favoriteLabel = new Label();
+			_favoriteLabel.text = "Ajouter l'arrêt aux favoris";
+			
+			hideFavoriteButton();
+		}	
 		
 		private function initHeader():void
 		{
@@ -75,6 +127,10 @@ package view.time
 			this.headerProperties.leftItems = new <DisplayObject>
 				[
 					this._backButton
+				];
+			this.headerProperties.rightItems = new <DisplayObject>
+				[
+					this._favoriteButton
 				];
 		}
 		
@@ -261,6 +317,35 @@ package view.time
 				removeChild(_resultContainer);
 		}
 		
+		private function hideFavoriteButton():void
+		{
+			_favoriteButton.removeEventListener(Event.CHANGE, _favoriteButton_changeHandler);
+			_favoriteButton.alpha = 0;
+			_favoriteButton.isEnabled = false;
+		}
+		
+		private function showFavoriteButton():void
+		{
+			_favoriteButton.isEnabled = true;
+			TweenLite.to(_favoriteButton, 0.3, {alpha: 1});
+			
+			if (!_stopDataBase.isExist(-1, "favorite"))
+			{
+				const callout:Callout = Callout.show(DisplayObject(_favoriteLabel), _favoriteButton, Callout.DIRECTION_LEFT);
+				
+				callout.disposeContent = false;
+				
+				_stopDataBase.addFavoriteStop(-1, "favorite", -1);
+			}
+			
+			if (_stopDataBase.isExist(_linePicker.selectedItem.value, _stopPicker.selectedItem.label))
+				_favoriteButton.isSelected = true;
+			else
+				_favoriteButton.isSelected = false;
+			
+			_favoriteButton.addEventListener(Event.CHANGE, _favoriteButton_changeHandler);
+		}
+		
 		/////////////////////////////////
 		// Event Handlers
 		/////////////////////////////////
@@ -299,6 +384,7 @@ package view.time
 			requestForTime();
 			hideResultContainer();
 			addProgressBar();
+			showFavoriteButton();
 		}
 		
 		private function linePicker_selectHandler(event:Event):void
@@ -307,6 +393,7 @@ package view.time
 			_stopPicker.removeEventListener(Event.CHANGE, stopPicker_selectHandler);
 			addStopPicker();
 			hideResultContainer();
+			hideFavoriteButton();
 		}
 		
 		private function backButton_clickHandler(event:Event):void
@@ -319,10 +406,37 @@ package view.time
 			this.width = stage.stageWidth;
 			this.height = stage.stageHeight;
 			
+			initFavoriteButton();
 			initHeader();
 			initLayout();
 			initPickerList();
 			initTimer();
+		}
+		
+		private function _favoriteButton_changeHandler(event:Event):void
+		{
+			if (_favoriteButton.isSelected)
+				_stopDataBase.addFavoriteStop(_linePicker.selectedItem.value, _stopPicker.selectedItem.label, _stopPicker.selectedIndex);
+			else
+				_stopDataBase.removeFavoriteStop(_linePicker.selectedItem.value, _stopPicker.selectedItem.label);
+		}
+		
+		private function remove_handler(event:Event):void
+		{
+			_timeSignal.remove(timeSignal_handler);
+			removeEventListener(Event.REMOVED, remove_handler);
+		}
+		
+		private function timeSignal_handler(stop:Object):void
+		{
+			if (!_linePicker || !_stopPicker)
+			{
+				setTimeout(timeSignal_handler, 100, stop);
+				return;
+			}
+			
+			_linePicker.selectedItem = LignesData.getLineInfo(stop.line);
+			_stopPicker.selectedIndex = stop.index;
 		}
 		
 	}

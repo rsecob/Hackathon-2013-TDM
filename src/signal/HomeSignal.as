@@ -22,5 +22,15 @@ package signal
 			return _listButtonSignal;
 		}
 		
+		private static var _navigationSignal:Signal;
+		
+		public static function get navigationSignal():Signal
+		{
+			if (!_navigationSignal)
+				_navigationSignal = new Signal();
+			
+			return _navigationSignal;
+		}
+		
 	}
 }

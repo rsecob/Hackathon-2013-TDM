@@ -79,6 +79,7 @@ package feathers.controls
 		 * @see feathers.core.IFeathersControl#nameList
 		 */
 		public static const DEFAULT_CHILD_NAME_LIST:String = "feathers-picker-list-list";
+		public static const SEARCH_CHILD_NAME_LIST:String = "search-picker-list-list";
 
 		/**
 		 * @private
