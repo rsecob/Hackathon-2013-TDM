@@ -28,6 +28,8 @@
     <SubTexture name="button-selected-disabled-skin" x="355" y="95" width="60" height="60"/>
     <SubTexture name="button-selected-up-skin" x="447" y="67" width="60" height="60"/>
     <SubTexture name="button-up-skin" x="447" y="3" width="60" height="60"/>
+    <SubTexture name="button-bike-up-skin" x="186" y="367" width="60" height="60"/>
+    <SubTexture name="button-bike-down-skin" x="186" y="434" width="60" height="60"/>
     <SubTexture name="callout-arrow-bottom-skin" x="175" y="199" width="40" height="16"/>
     <SubTexture name="callout-arrow-left-skin" x="3" y="135" width="16" height="40"/>
     <SubTexture name="callout-arrow-right-skin" x="3" y="253" width="16" height="40"/>
