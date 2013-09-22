@@ -3,9 +3,13 @@ package view.game
 	import com.gamua.flox.AuthenticationType;
 	import com.gamua.flox.Flox;
 	import com.gamua.flox.Player;
+	import com.gamua.flox.utils.setTimeout;
+	
+	import feathers.themes.MetalWorksMobileTheme;
 	
 	import flash.display.Bitmap;
 	import flash.geom.Point;
+	import flash.media.Sound;
 	
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -13,7 +17,11 @@ package view.game
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	import starling.text.TextField;
 	import starling.textures.Texture;
+	import starling.utils.Color;
+	import starling.utils.HAlign;
+	import starling.utils.VAlign;
 	import starling.utils.deg2rad;
 	import starling.utils.rad2deg;
 	
@@ -71,6 +79,9 @@ package view.game
 		public static const Malus2Texture:Class;
 		protected var malus2Texture:Texture;
 		
+		[Embed(source='../../../assets/sounds/tramway.mp3')]
+		private const TramwaySound:Class;
+		
 		private var real_begin:Touch = null;
 		private var begin_time:Number = 0;
 		private var baseTramwayPositionX:Number = 0;
@@ -79,6 +90,10 @@ package view.game
 		private var memeFlying:Boolean = false;
 		private var bonuses:Vector.<BonusGame>;
 
+		private var score:Number = 0;
+		private var scoreText:TextField = null;
+		private var gameEnded:Boolean = false;
+		
 		public function GamePlaying(game:Game)
 		{
 			super();
@@ -93,14 +108,31 @@ package view.game
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			this.loadTextures();
-			this.login();
-			this.generateNewBonus();
-			this.generateNewBonus();
-			game.addEventListener(Event.ENTER_FRAME, newFrame);
+			this.intro();
+			
+		}
+		
+		protected function intro()
+		{
+			var text:TextField = new TextField(Math.max(stage.stageHeight, stage.stageWidth), Math.min(stage.stageHeight, stage.stageWidth), "", "Arial", 30, Color.BLACK);
+			text.text = "Mémé veut aller à \""+ game.scenario.name +"\",\nen partant de "+ game.scenario.place_from +" et en s'arrêtant à "+ game.scenario.place_to +"\n";
+			text.text += "Aidez-la en lui donnant un petit coup de pouce !";
+			text.hAlign = HAlign.CENTER;
+			text.vAlign = VAlign.CENTER;
+			addChild(text);
+			setTimeout(function():void {
+				removeChild(text);
+				login();
+				generateNewBonus();
+				generateNewBonus();
+				game.addEventListener(Event.ENTER_FRAME, newFrame);
+			}, 5000);
 		}
 		
 		protected function newFrame(e:Event):void
 		{
+			if (gameEnded)
+				return ;
 			if (this.cloudImage && !memeFlying && !tramArrived)
 			{
 				if (this.tramwayImage.x < - this.tramwayImage.width + 200)
@@ -110,6 +142,8 @@ package view.game
 				}
 				else
 				{
+					var soundClip:Sound = new TramwaySound();
+					soundClip.play();
 					tramArrived = true;
 					this.waitForPlayerMove();
 				}
@@ -119,6 +153,7 @@ package view.game
 				return ;
 			this.moveGraphics();
 			this.handleCollisions();
+			this.refreshScores();
 		}
 		
 		protected function moveGraphics() : void
@@ -126,29 +161,30 @@ package view.game
 			var x_mov:Number = this.speed * Math.cos(this.angle);
 			var y_mov:Number = this.speed * Math.sin(this.angle);
 
+			this.score += x_mov / 10;
 			this.memeImage.rotation = deg2rad((rad2deg(this.memeImage.rotation)  + this.speed / 4) % 360);
 			
 			this.cloudImage.x -= x_mov / 20;
-			this.cloudImage.y += y_mov / 20;
+//			this.cloudImage.y += y_mov / 20;
 			if (this.cloudImage.x <= - this.cloudImage.width / 2)
-				this.cloudImage.x = 0;
+				this.cloudImage.x += this.cloudImage.width / 2;
 			
 			this.housesImage.x -= x_mov / 4;
-			this.housesImage.y += y_mov;
+//			this.housesImage.y += y_mov;
 			if (this.housesImage.x <= - this.housesImage.width / 2)
-				this.housesImage.x = 0;
+				this.housesImage.x += this.housesImage.width / 2;
 			
 			this.treesImage.x -= x_mov / 3;
-			this.treesImage.y += y_mov;
+//			this.treesImage.y += y_mov;
 			if (this.treesImage.x <= - this.treesImage.width / 2)
-				this.treesImage.x = 0;
+				this.treesImage.x += this.treesImage.width / 2;
 			
 			if (this.tramwayImage != null)
 			{
 				this.railsImage.x -= x_mov;
-				this.railsImage.y += y_mov;
+//				this.railsImage.y += y_mov;
 				this.tramwayImage.x -= x_mov;
-				this.tramwayImage.y += y_mov;
+//				this.tramwayImage.y += y_mov;
 				if (this.tramwayImage.x <= - this.tramwayImage.width)
 				{
 					removeChild(railsImage);
@@ -158,15 +194,19 @@ package view.game
 				}
 			}
 			this.groundImage.x -= x_mov;
-			this.groundImage.y += y_mov;
+//			this.groundImage.y += y_mov;
 			if (this.groundImage.x <= - this.groundImage.width / 2)
-				this.groundImage.x = 0;
+				this.groundImage.x += this.groundImage.width / 2;
+			
+			this.memeImage.y -= y_mov;
 			
 			this.moveBonuses(x_mov, y_mov);
 			this.angle -= Math.PI / 300;
 			if (this.angle < - Math.PI / 2)
 				this.angle = - Math.PI / 2;
 			this.speed -= Math.sin(this.angle) / 10;
+			if (this.speed < 0)
+				this.speed = 0.1;
 		}
 		
 		protected function moveBonuses(x_mov:Number, y_mov:Number):void
@@ -175,8 +215,8 @@ package view.game
 			{
 				if (bonus)
 				{
-					bonus.y += y_mov;
-					bonus.x -= x_mov;
+//					bonus.y += y_mov;
+					bonus.refresh(x_mov);
 				}
 			}
 		}
@@ -199,6 +239,18 @@ package view.game
 			}
 		}
 
+		protected function refreshScores():void
+		{
+			if (scoreText == null)
+			{
+				scoreText = new TextField(Math.max(stage.stageHeight, stage.stageWidth) - 10 * Game.DPI, 40 * Game.DPI, "0", "Arial", 30, Color.GRAY);
+				scoreText.hAlign = HAlign.RIGHT;
+				scoreText.vAlign = VAlign.CENTER;
+				addChild(scoreText);
+			}
+			scoreText.text = (Math.round(this.score)).toString();
+		}
+		
 		protected function login():void
 		{/*
 			if (Player.current.authType == AuthenticationType.GUEST)
@@ -229,70 +281,79 @@ package view.game
 		{
 			this.cloudTexture.repeat = true;
 			cloudImage = new Image(this.cloudTexture);
-			var coeff:int = Math.round(stage.stageHeight / cloudTexture.width + 1);
+			var coeff:Number = 2;
 			cloudImage.width = cloudTexture.width * coeff;
+			cloudImage.height *= Game.DPI;
 			cloudImage.setTexCoords(1, new Point(coeff, 0));
 			cloudImage.setTexCoords(3, new Point(coeff, 1));
 			
 			this.groundTexture.repeat = true;
 			groundImage = new Image(this.groundTexture);
-			coeff = Math.round(stage.stageHeight / groundTexture.width + 1);
+			coeff = 2;
 			groundImage.width = groundTexture.width * coeff;
-			groundImage.y = stage.stageWidth - groundImage.height;
+			groundImage.y = Math.min(stage.stageHeight, stage.stageWidth) - groundImage.height;
 			groundImage.setTexCoords(1, new Point(coeff, 0));
 			groundImage.setTexCoords(3, new Point(coeff, 1));
 			
 			this.housesTexture.repeat = true;
 			housesImage = new Image(this.housesTexture);
-			coeff = Math.round(stage.stageHeight / housesTexture.width + 1);
+			coeff = 2;
 			housesImage.width = housesTexture.width * coeff;
-			housesImage.y = stage.stageWidth - 310;
+			housesImage.height *= Game.DPI;
+			housesImage.y = Math.min(stage.stageHeight, stage.stageWidth) - 310 * Game.DPI;
 			housesImage.setTexCoords(1, new Point(coeff, 0));
 			housesImage.setTexCoords(3, new Point(coeff, 1));
 			
 			this.treesTexture.repeat = true;
 			treesImage = new Image(this.treesTexture);
-			coeff = Math.round(stage.stageHeight / treesTexture.width + 1);
+			coeff = 2;
 			treesImage.width = treesTexture.width * coeff;
-			treesImage.y = stage.stageWidth - 160;
+			treesImage.height *= Game.DPI;
+			treesImage.y = Math.min(stage.stageHeight, stage.stageWidth) - 160 * Game.DPI;
 			treesImage.setTexCoords(1, new Point(coeff, 0));
 			treesImage.setTexCoords(3, new Point(coeff, 1));
 			
 			memeImage = new Image(this.memeTexture);
 			memeImage.pivotX = memeImage.width  / 2.0;
 			memeImage.pivotY = memeImage.height / 2.0;
-			memeImage.height = 63;
-			memeImage.width = 50;
-			memeImage.y = stage.stageWidth - 90;
-			memeImage.x = stage.stageHeight / 2 + 145;
+			memeImage.height = 63 * Game.DPI;
+			memeImage.width = 50 * Game.DPI;
+			memeImage.y = Math.min(stage.stageHeight, stage.stageWidth) - 90 * Game.DPI;
+			memeImage.x = Math.max(stage.stageHeight, stage.stageWidth) / 2 + 145 * Game.DPI;
 
 			tramwayImage = new Image(this.tramwayTexture);
-			tramwayImage.width = 511;
-			tramwayImage.height = 87;
-			tramwayImage.y = stage.stageWidth - 115;
+			tramwayImage.width = 511 * Game.DPI;
+			tramwayImage.height = 87 * Game.DPI;
+			tramwayImage.y = Math.min(stage.stageHeight, stage.stageWidth) - 115 * Game.DPI;
 			tramwayImage.x = this.baseTramwayPositionX = - tramwayImage.width;
 			
 			railsImage = new Image(this.railsTexture);
-			railsImage.y = stage.stageWidth - 66;
-			railsImage.x = - railsImage.width + stage.stageHeight / 2 + 100;
+			railsImage.y = Math.min(stage.stageHeight, stage.stageWidth) - 66 * Game.DPI;
+			railsImage.x = - railsImage.width + Math.max(stage.stageHeight, stage.stageWidth) / 2 + 100 * Game.DPI;
 
 			addChild(groundImage);
 			addChild(cloudImage);
 			addChild(housesImage);
 			addChild(treesImage);
-			stage.addChild(memeImage);
+			addChild(memeImage);
 			addChild(railsImage);
 			addChild(tramwayImage);
 		}
 		
 		public function handleCollisions():void
 		{
-			if (this.groundImage.y < (stage.stageHeight - this.groundImage.height))
+			if (this.memeImage.y >= (stage.stageHeight - 90 * Game.DPI))
 			{
 				this.angle = Math.abs(this.angle);
-				this.speed /= 2;
-				if (this.speed < 0.2)
+				if (this.angle > Math.PI / 2)
+					this.angle = Math.PI / 4;
+				this.speed /= 1.5;
+				if (this.speed < 6)
+				{
 					this.speed = 0;
+					this.angle = -Math.PI / 4;
+					this.endGame();
+				}
 			}
 			
 			var len:uint = this.bonuses.length;
@@ -312,11 +373,39 @@ package view.game
 						if (bonus.isColliding(memeImage))
 						{
 							bonus.apply(this);
+							bonus.hide();
 						}
 						bonuses.push(bonus);
 					}
 				}
 				len--;
+			}
+		}
+		
+		public function endGame():void
+		{
+			gameEnded = true;
+			
+			this.removeChildren();
+			var textField:TextField = new TextField(stage.stageWidth, stage.stageHeight, "", "Arial", 30, Color.BLACK, true);
+			
+			textField.text = "Vous vous êtes rapproché de "+ (Math.round(this.score)).toString() +"m de "+ this.game.scenario.place_to +".\n";
+			textField.text += "La TAM fait mieux, elle vous y amène directement!";
+			
+			textField.hAlign = HAlign.CENTER;
+			textField.vAlign = VAlign.CENTER;
+			addChild(textField);
+			game.stage.addEventListener(TouchEvent.TOUCH, quitGame);
+		}
+		
+		protected function quitGame(e:TouchEvent):void
+		{
+			var begin:Touch = e.getTouch(game, TouchPhase.BEGAN);
+			
+			if (begin)
+			{
+				game.stage.removeEventListener(TouchEvent.TOUCH, quitGame);
+				dispatchEvent(new Event("QUIT_GAME"));
 			}
 		}
 		
@@ -380,14 +469,15 @@ package view.game
 				last_x = last.x;
 			if (Math.random() <= 0.5)
 				type = true;
-			var newBonus:BonusGame = new BonusGame(type, last_x + Math.max(stage.stageHeight, stage.stageWidth) / 2 + Math.random() * 20);
+			var newBonus:BonusGame = new BonusGame(type, last_x + Math.max(stage.stageHeight, stage.stageWidth) + Math.random() * 20);
 			var img:Image;
 			if (type == BonusGame.BONUS)
 			{
 				img = new Image(bonusTexture);
-				img.height = 30;
-				img.width = 50;
-				img.y = groundImage.y + groundImage.height - 82;
+				img.height = 30 * Game.DPI;
+				img.width = 50 * Game.DPI;
+				img.y = Math.min(stage.stageHeight, stage.stageWidth) - 82 * Game.DPI;
+//				img.y = groundImage.y + groundImage.height - 82 * Game.DPI;
 			}
 			else
 			{
@@ -395,9 +485,10 @@ package view.game
 					img = new Image(malus1Texture);
 				else
 					img = new Image(malus2Texture);
-				img.width = 50 / 1.5;
-				img.height = 116 / 1.5;
-				img.y = groundImage.y + groundImage.height - img.height * 1.5;
+				img.width = 50 / 1.5 * Game.DPI;
+				img.height = 116 / 1.5 * Game.DPI;
+				img.y = Math.min(stage.stageHeight, stage.stageWidth) - img.height * 1.5;
+//				img.y = groundImage.y + groundImage.height - img.height * 1.5;
 			}
 			newBonus.img = img;
 			

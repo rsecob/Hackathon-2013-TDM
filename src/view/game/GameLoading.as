@@ -30,14 +30,24 @@ package view.game
 		
 		protected function loadScenario() : void
 		{
-			//loader = APIConnector.get("", onCompleteScenario);
-			endScenario = true;
-			this.throwCompleteEvent();
+			loader = APIConnector.get("event", onCompleteScenario, onErrorScenario);
 		}
 		
 		protected function loadAssets() : void
 		{
 			endAssets = true;
+			this.throwCompleteEvent();
+		}
+		
+		protected function onErrorScenario(e:flash.events.Event):void
+		{
+			var scenario:GameScenario = new GameScenario();
+			scenario.place_from = "Corum";
+			scenario.place_to = "Comédie";
+			scenario.name = "Musée";
+			scenario.line = 1;
+			this.endScenario = true;
+			game.scenario = scenario;
 			this.throwCompleteEvent();
 		}
 		
@@ -51,17 +61,20 @@ package view.game
 				// Error, base scenario.
 				scenario.place_from = "Corum";
 				scenario.place_to = "Comédie";
-				scenario.stops.push("Corum", "Comédie");
 				scenario.line = 1;
+				scenario.name = "Musée";
 				this.endScenario = true;
+				game.scenario = scenario;
 				this.throwCompleteEvent();
 				return ;
 			}
-			
-			scenario.place_from = splited.shift() as String;
-			scenario.place_to = splited.shift() as String;
-			scenario.line = parseInt(splited.shift() as String);
-			scenario.name = splited.shift() as String;
+			else
+			{
+				scenario.place_from = splited.shift() as String;
+				scenario.place_to = splited.shift() as String;
+				scenario.line = parseInt(splited.shift() as String);
+				scenario.name = splited.shift() as String;
+			}
 			game.scenario = scenario;
 			this.endScenario = true;
 			this.throwCompleteEvent();
@@ -71,7 +84,6 @@ package view.game
 		{
 			if (endScenario && endAssets)
 			{
-				trace("throw complete event");
 				this.dispatchEvent(new starling.events.Event(COMPLETE_EVENT, true, false));
 			}
 		}

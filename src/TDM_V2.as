@@ -73,6 +73,5 @@ package
 			this.stage.removeEventListener(Event.ACTIVATE, stage_activateHandler);
 			this._starling.start();
 		}
-		
 	}
 }

@@ -3,6 +3,8 @@ package view.game
 	import com.gamua.flox.Flox;
 	import com.gamua.flox.Player;
 	
+	import feathers.themes.MetalWorksMobileTheme;
+	
 	import flash.display.StageAlign;
 	import flash.display.StageAspectRatio;
 	import flash.display.StageScaleMode;
@@ -23,21 +25,28 @@ package view.game
 		protected var _scenario:GameScenario = null;
 		protected var _score:int = 0;
 		
+		public static var DPI:Number;
+		
 		public function set scenario(scenario:GameScenario):void
 		{
 			this._scenario = scenario;
 		}
 		
+		public function get scenario():GameScenario
+		{
+			return _scenario;
+		}
+		
 		public function Game()
 		{
 			//Flox.init("6bMjTGNEfCLGNA0p", "pfaXoM1llQNtzgjJ", "0.9");
-			trace("Game constructor");
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
 		public function onAddedToStage() : void
 		{
-			trace("Game added to stage");
+			new MetalWorksMobileTheme();
+			DPI = MetalWorksMobileTheme.DPI_SCALE + 0.23;
 			stage.color = 0x5caacc;
 			this.changeGameState(LOADING_STATE);
 			Starling.current.nativeStage.setAspectRatio(StageAspectRatio.LANDSCAPE);
@@ -58,14 +67,19 @@ package view.game
 				break;
 				case PLAYING_STATE:
 					this._scene = new GamePlaying(this);
+					this._scene.addEventListener("QUIT_GAME", quitGame);
 				break;
 			}
 			this.addChild(this._scene);
 		}
 
+		public function quitGame():void
+		{
+			trace("quit game");
+		}
+		
 		public function onLoadingComplete(e:Event):void
 		{
-			trace("Loading complete");
 			this.changeGameState(PLAYING_STATE);
 		}
 		
