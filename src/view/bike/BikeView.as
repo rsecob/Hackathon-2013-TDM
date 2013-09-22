@@ -183,7 +183,7 @@ package view.bike
 				_closeButton.label = "x";
 				_closeButton.includeInLayout = false;
 				
-//				_closeButton.addEventListener(Event.TRIGGERED, closeButton_clickHandler);
+				_closeButton.addEventListener(Event.TRIGGERED, closeButton_clickHandler);
 				_titleContainer.addLayoutItem(_closeButton);
 			}
 			
@@ -197,7 +197,7 @@ package view.bike
 				verticalLayout.paddingTop = verticalLayout.gap = this.dpiScale * 10;
 				_resultContainer.layout = verticalLayout;
 				
-				_popPupContainer.addLayoutItem(_resultContainer);
+				_popPupContainer.addLayoutItem(_resultContainer, 100);
 			}
 			
 			_resultContainer.removeChildren();
@@ -205,6 +205,8 @@ package view.bike
 			for each (var station:BikeRenderer in bikeStations)
 			{
 				station.width = this.width - (this.dpiScale * 10 * 2);
+				station.height = 67 * this.dpiScale * 3;
+				station.invalidate();
 				_resultContainer.addChild(station);
 			}
 			
@@ -215,12 +217,19 @@ package view.bike
 		// Event Handlers
 		/////////////////////////////////
 		
+		private function closeButton_clickHandler(event:Event):void
+		{
+			if (PopUpManager.isPopUp(_popPupContainer))
+				PopUpManager.removePopUp(_popPupContainer);
+			dispatchEventWith("backHome", true);
+		}
+		
 		private function apiLoader_errorHandler(error:IOErrorEvent):void
 		{
 			_label.text = "Un problème est survenue\nlors de la requête";
 		}
 		
-		private function apiLoader_complete(data:*):void
+		private function processParser(data:*):void
 		{
 			var bikeStations:Array = JSON.parse(data) as Array;
 			
@@ -236,6 +245,7 @@ package view.bike
 					bikeRenderer.setTile(stationInfo.name + " à " + parseInt(station.distance).toString() + " m");
 					bikeRenderer.setBikes(stationInfo.bikes_available + " vélos disponibles");
 					bikeRenderer.setSlots(stationInfo.slots_available + " places libres");
+					bikeRenderer.setCard(stationInfo.cb);
 					
 					stationBikes.push(bikeRenderer);
 				}
@@ -243,7 +253,14 @@ package view.bike
 				showResult(stationBikes);
 			}
 			else
-				_label.text = "Aucune stations dans\nles alentours";				
+				_label.text = "Aucune stations dans\nles alentours";
+		}
+		
+		private function apiLoader_complete(data:*):void
+		{
+			TweenLite.to(_progressBar, 0.1, {value: 100, onComplete: function():void {
+				processParser(data);
+			} });
 		}
 		
 		protected function geolocation_updateHandler(event:GeolocationEvent):void

@@ -1,9 +1,15 @@
 package view.bike
 {
 	import feathers.controls.Button;
+	import feathers.controls.ImageLoader;
 	import feathers.controls.Label;
 	import feathers.controls.VGroup;
+	import feathers.data.EmbeddedAssets;
+	import feathers.themes.MetalWorksMobileTheme;
 	
+	import flash.utils.setTimeout;
+	
+	import starling.display.Image;
 	import starling.events.Event;
 
 	public class BikeRenderer extends Button
@@ -31,7 +37,6 @@ package view.bike
 		
 		private function resize_handler(event:Event):void
 		{
-			trace("DEK");
 			this.height = _vGroup.height;
 		}
 		
@@ -53,6 +58,35 @@ package view.bike
 		public function setSlots(value:String):void
 		{
 			_slots.text = value;
+		}
+		
+		private var _cardIcon:ImageLoader;
+		
+		public function setCard(value:String):void
+		{
+			if (!this.width || !this.height)
+			{
+				setTimeout(setCard, 50, value);
+				return;
+			}
+			
+			if (value == "1")
+			{
+				_cardIcon = new ImageLoader();
+				_cardIcon.source = EmbeddedAssets.CARD_ICON;
+				_cardIcon.snapToPixels = true;
+				
+				_cardIcon.includeInLayout = false;
+				_cardIcon.addEventListener(Event.RESIZE, cardIcon_resize);
+				
+				addChild(_cardIcon);
+			}
+		}
+		
+		private function cardIcon_resize():void
+		{
+			_cardIcon.x = this.width - (20 * MetalWorksMobileTheme.DPI_SCALE) - _cardIcon.width;
+			_cardIcon.y = this.height - (20 * MetalWorksMobileTheme.DPI_SCALE) - _cardIcon.height;
 		}
 	}
 }

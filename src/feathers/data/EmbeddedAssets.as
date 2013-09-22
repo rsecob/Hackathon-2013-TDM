@@ -253,6 +253,19 @@ package feathers.data
 		public static var FAVORITE_ICON:Texture;
 		public static var FAVORITE_SELECTED_ICON:Texture;
 		
+		///////////////////////////
+		// BIKE VIEW ICONS
+		///////////////////////////
+		
+		// Embed
+		
+		[Embed(source="/../assets/icons/card.png")]
+		private static const CARD_EMBED:Class;
+		
+		// Texture
+		
+		public static var CARD_ICON:Texture;
+		
 		public static function initialize():void
 		{
 			// Home View
@@ -320,6 +333,10 @@ package feathers.data
 			
 			FAVORITE_ICON = Texture.fromBitmap(new FAVORITE_EMBED());
 			FAVORITE_SELECTED_ICON = Texture.fromBitmap(new FAVORITE_SELECTED_EMBED());
+			
+			// Bike View
+			
+			CARD_ICON = Texture.fromBitmap(new CARD_EMBED());
 		}
 	}
 }
